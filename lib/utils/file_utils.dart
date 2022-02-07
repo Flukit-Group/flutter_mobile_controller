@@ -4,6 +4,7 @@ import 'dart:io';
 import 'dart:typed_data';
 import 'package:archive/archive.dart';
 import 'package:mobile_controller/config/file_config.dart';
+import 'package:mobile_controller/utils/log_helper.dart';
 import 'package:path_provider/path_provider.dart';
 
 /// File helper to operate or get files.
@@ -153,7 +154,7 @@ class FileUtils {
   /// @storageDir 存储的目录
   /// @zipFilePath 解压的文件路径
   static unZipFiles(String storageDir, String zipFilePath) async {
-    print("压缩文件路径zipFilePath = $zipFilePath");
+    logV("压缩文件路径zipFilePath = $zipFilePath");
     // 从磁盘读取Zip文件。
     List<int> bytes = File(zipFilePath).readAsBytesSync();
     // 解码Zip文件
@@ -170,7 +171,7 @@ class FileUtils {
           //Linux or MacOS need run permission
           Process.runSync("chmod", ["+x", f.path], runInShell: true);
         }
-        print("解压后的文件路径 = ${f.path}");
+        logV("解压后的文件路径 = ${f.path}");
       } else {
         Directory(storageDir + "/" + file.name).create(recursive: true);
       }

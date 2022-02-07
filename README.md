@@ -19,3 +19,4 @@ samples, guidance on mobile development, and a full API reference.
 - [flutter_mobile_command_tools](https://github.com/LuckyLi706/flutter_mobile_command_tools)
 - [macos_ui](https://github.com/GroovinChip/macos_ui)
 - [fluent icons](https://github.com/fayazara/fluenticons)
+- [Using Flutter to build a native-looking desktop app for macOS and Windows](https://blog.whidev.com/native-looking-desktop-app-with-flutter/)
