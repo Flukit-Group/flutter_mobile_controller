@@ -2,6 +2,20 @@
 
 A new Flutter project for PC to control mobiles by adb tool.
 
+## Features
+- Provide computer control mobile phone shortcut keys
+- Mobile device and application information extraction display
+- Support for custom commands
+- Provide a script to automate the control of Tiktok or any other apps
+- Multi-platform supported (MacOs, Windows, Linux)
+
+## Current Progress
+- [x] Terminal Technology Research
+- [x] UI framework construction on PC
+- [ ] Display connected device list
+- [ ] Query and display brief information about devices
+- [ ] Automatically control device sliding, input text, etc.
+
 ## Getting Started
 
 This project is a starting point for a Flutter application.
