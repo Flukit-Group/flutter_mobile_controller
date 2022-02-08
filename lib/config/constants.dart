@@ -1,4 +1,7 @@
 
+/// General constants of app.
+/// @author dorck
+/// @date 2022/02/07
 class Constants {
   Constants._();
 
@@ -13,6 +16,7 @@ class Constants {
   static const String isInnerAdbKey = "isInnerAdb";
 
   // Command constants
+  // TODO: move into independent class.
   static const String ADB_COMMAND_DEVICES_LIST = 'devices';
   static const String ADB_COMMAND_WIRELESS_CONNECT = 'connect';
   static const String ADB_COMMAND_WIRELESS_DISCONNECT = 'disconnect';
