@@ -1,8 +1,8 @@
 
 import 'package:fluent_ui/fluent_ui.dart';
 import 'package:flutter/material.dart' as material;
-import 'package:mobile_controller/command/android_command.dart';
-import 'package:mobile_controller/config/constants.dart';
+import 'package:mobile_controller/command/command_controller.dart';
+import 'package:mobile_controller/config/command_config.dart';
 import 'package:mobile_controller/utils/log_helper.dart';
 
 class MobileConnectionPage extends StatefulWidget {
@@ -49,29 +49,27 @@ class _MobileConnectionPageState extends State<MobileConnectionPage> {
                     Button(
                       child: Text('刷新设备'),
                       onPressed: () {
-                        var command = AndroidCommand();
-                        command.execCommand([Constants.ADB_COMMAND_DEVICES_LIST]).then((value) {
-                          logV('execute cmd result: adb devices >> ${value.stdout}');
-                          var result = command.dealWithData(Constants.ADB_COMMAND_DEVICES_LIST, value);
-                          if (result.error) {
-                            logW('execute failed: $result');
-                            setState(() {
-                              _executionResult = 'Result >> ' + result.toString();
-                            });
-                          } else {
-                            List<String> currentAllDevice = result.result;
-                            logV("获取到的设备数量：" + currentAllDevice.length.toString());
-                            currentAllDevice.forEach((element) {
+                        CommandController.executeAdbCommand(AdbCommand.deviceList).then((value) {
+                          logV('execute cmd result: adb devices >> $value');
+                          if (value.succeed) {
+                            List<String> currentAllDevice = value.result;
+                            logV("fetch device size: " + currentAllDevice.length.toString());
+                            for (var element in currentAllDevice) {
                               if (element.contains("offline")) {
-                                logI(element + ",当前设备不在线,移除列表");
+                                logI(element + ", this device is not online.");
                               } else {
                                 logI(element);
                               }
-                            });
+                            }
                             currentAllDevice.removeWhere(
                                     (element) => element.contains("offline"));
                             setState(() {
-                              _executionResult = 'Result >> ' + value.stdout.toString();
+                              _executionResult = 'Result >> ' + value.originData!.stdout.toString();
+                            });
+                          } else {
+                            logW('execute failed: $value');
+                            setState(() {
+                              _executionResult = 'Result >> ' + (value.result ?? value.toString());
                             });
                           }
                         }).catchError((e) {

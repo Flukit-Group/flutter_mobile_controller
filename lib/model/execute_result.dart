@@ -1,11 +1,20 @@
 
+import 'dart:io';
+
 /// Command execution result.
 class ExecutionResult {
-  bool error = false;
+  ExecutionResult.from(this.command, this.succeed, this.result, {
+    this.originData,
+  });
+
+  String command = '';
+  bool succeed = true;
+  ProcessResult? originData;
   dynamic result;
 
   @override
   String toString() {
-    return 'ExecutionResult{ error: $error, result: ${result.toString()}}';
+    return 'ExecutionResult{ command: $command, succeed: $succeed, '
+        'result: ${result.toString()}, originData: $originData}';
   }
 }

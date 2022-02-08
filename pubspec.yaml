@@ -84,6 +84,7 @@ flutter:
     - assets/windows/tools.zip
     - assets/macos/tools.zip
     - assets/linux/tools.zip
+    - assets/dy_device_adapt.json # 抖音各主流机型适配
 
   # To add assets to your application, add an assets section, like this:
   # assets:

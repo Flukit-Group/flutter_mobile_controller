@@ -15,10 +15,4 @@ class Constants {
   static const String isRootKey = "isRoot";
   static const String isInnerAdbKey = "isInnerAdb";
 
-  // Command constants
-  // TODO: move into independent class.
-  static const String ADB_COMMAND_DEVICES_LIST = 'devices';
-  static const String ADB_COMMAND_WIRELESS_CONNECT = 'connect';
-  static const String ADB_COMMAND_WIRELESS_DISCONNECT = 'disconnect';
-  static const String ADB_COMMAND_VERSION = 'version';
 }
