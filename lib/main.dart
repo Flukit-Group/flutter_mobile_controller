@@ -5,6 +5,7 @@ import 'package:mobile_controller/config/common_config.dart';
 import 'package:mobile_controller/config/constants.dart';
 import 'package:mobile_controller/pages/home_page.dart';
 import 'package:mobile_controller/style/theme.dart';
+import 'package:mobile_controller/utils/initializer_helper.dart';
 import 'package:provider/provider.dart';
 
 /// Launcher of application.
@@ -24,6 +25,7 @@ bool get isDesktop {
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
   CommonConfig.initAppVersion();
+  await InitializerHelper.init(CommonConfig.configs);
   runApp(const MyApp());
 
   if (isDesktop) {

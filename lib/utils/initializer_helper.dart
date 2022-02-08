@@ -47,6 +47,7 @@ class InitializerHelper {
             String? path = await FileUtils.localPath(dir: FileUtils.TEMP_DIR);
             FileConfig.desktopPath = path ?? "";
           }
+          logI('user path is: ${FileConfig.userPath}');
           _initAdbPath();
         } else {
           FileConfig.desktopPath = Directory.current.path;
@@ -84,6 +85,7 @@ class InitializerHelper {
       FileConfig.adbPath = FileConfig.customizedAdbPath =
           FileConfig.userPath + r"/Android/Sdk/platform-tools/adb";
     }
+    logI('adb path is: ${FileConfig.adbPath}');
   }
 
   //初始化配置
@@ -116,6 +118,7 @@ class InitializerHelper {
         CommonConfig.isRoot = map[Constants.isRootKey];
       }
       mapSettings.addAll(map);
+      logI('global configs: $mapSettings');
     }
   }
 
@@ -129,12 +132,12 @@ class InitializerHelper {
       FileUtils.writeFile(signer, signerJsonFile);
     }
 
-    var jksFile = await FileUtils.localFile("apk.jks", subDir: "apksigner");
-    FileConfig.jksPath = jksFile.path;
-    if (!await FileUtils.isExistFile(jksFile.path)) {
-      var buffer = await rootBundle.load('assets/apk.jks');
-      FileUtils.writeBytesFile(buffer, jksFile);
-    }
+    // var jksFile = await FileUtils.localFile("apk.jks", subDir: "apksigner");
+    // FileConfig.jksPath = jksFile.path;
+    // if (!await FileUtils.isExistFile(jksFile.path)) {
+    //   var buffer = await rootBundle.load('assets/apk.jks');
+    //   FileUtils.writeBytesFile(buffer, jksFile);
+    // }
 
     var signerJarFile = await FileUtils.localFile("apksigner.jar", subDir: "apksigner");
     FileConfig.apkSignerJarPath = signerJarFile.path;
