@@ -28,9 +28,9 @@ class _MobileConnectionPageState extends State<MobileConnectionPage> {
               flex: 2,
               child: Container(
                 height: double.infinity,
-                padding: const EdgeInsets.all(10),
+                padding: const EdgeInsets.all(6),
                 decoration: BoxDecoration(
-                  color: Colors.black.withOpacity(0.16),
+                  color: Colors.white.withOpacity(0.16),
                   borderRadius: BorderRadius.circular(12.0),
                   border: Border.all(color: Colors.grey, width: 0.8)
                 ),
@@ -52,19 +52,10 @@ class _MobileConnectionPageState extends State<MobileConnectionPage> {
                         CommandController.executeAdbCommand(AdbCommand.deviceList).then((value) {
                           logV('execute cmd result: adb devices >> $value');
                           if (value.succeed) {
-                            List<String> currentAllDevice = value.result;
+                            var currentAllDevice = value.result;
                             logV("fetch device size: " + currentAllDevice.length.toString());
-                            for (var element in currentAllDevice) {
-                              if (element.contains("offline")) {
-                                logI(element + ", this device is not online.");
-                              } else {
-                                logI(element);
-                              }
-                            }
-                            currentAllDevice.removeWhere(
-                                    (element) => element.contains("offline"));
                             setState(() {
-                              _executionResult = 'Result >> ' + value.originData!.stdout.toString();
+                              _executionResult = 'Result >> ' + value.result.toString();
                             });
                           } else {
                             logW('execute failed: $value');

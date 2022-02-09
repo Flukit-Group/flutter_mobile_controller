@@ -3,6 +3,7 @@ import 'dart:io';
 
 import 'package:mobile_controller/command/adb/adb_command_executor.dart';
 import 'package:mobile_controller/config/command_config.dart';
+import 'package:mobile_controller/model/device_result.dart';
 import 'package:mobile_controller/model/execute_result.dart';
 
 import '../../utils/platform_adapt_utils.dart';
@@ -31,13 +32,17 @@ class DevicesListCommandExecutor extends AdbCommandExecutor {
           }
         }
       }
-      if (currentDevices.isNotEmpty) {
-        return ExecutionResult.from(fullCommand, true, currentDevices);
+      List<DeviceResult> formatList = [];
+      for (var deviceStr in currentDevices) {
+        formatList.add(DeviceResult.from(deviceStr));
+      }
+      if (formatList.isNotEmpty) {
+        return ExecutionResult.from(fullCommand, true, formatList, originData: originData);
       } else {
-        return ExecutionResult.from(fullCommand, false, "No device connected!");
+        return ExecutionResult.from(fullCommand, false, "No device connected!", originData: originData);
       }
     } else {
-      return ExecutionResult.from(fullCommand, false, outData);
+      return ExecutionResult.from(fullCommand, false, outData, originData: originData);
     }
   }
 

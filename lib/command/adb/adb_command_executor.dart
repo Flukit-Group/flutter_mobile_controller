@@ -3,6 +3,7 @@ import 'dart:convert';
 import 'dart:io';
 import 'package:flutter/material.dart';
 import 'package:mobile_controller/model/execute_result.dart';
+import 'package:mobile_controller/utils/log_helper.dart';
 import '../../config/command_config.dart';
 import '../../config/common_config.dart';
 import '../../utils/platform_adapt_utils.dart';
@@ -28,7 +29,7 @@ abstract class AdbCommandExecutor {
       finalCommand = finalCommand + ' $extArguments';
     }
     fullCommand = finalCommand;
-    List<String> args = extArguments.split(" ");
+    List<String> args = finalCommand.split(" ");
     // In most cases, we need to specify the device to execute the command.
     if (CommonConfig.currentAndroidDevice.isNotEmpty) {
       var mainCmd = args[0];
@@ -39,6 +40,7 @@ abstract class AdbCommandExecutor {
         args = ["-s", CommonConfig.currentAndroidDevice, ...args];
       }
     }
+    logI('executable: $executable, arguments: $args', tag: 'AdbCommandExecutor');
     var processResult = await _runCmd(args, executable: executable,
         synchronous: synchronous, runInShell: runInShell, workingDirectory: workingDirectory);
     // Check for multi devices operation at same time.

@@ -3,6 +3,7 @@
 import 'package:bitsdojo_window/bitsdojo_window.dart';
 import 'package:fluent_ui/fluent_ui.dart';
 import 'package:flutter/foundation.dart';
+import 'package:flutter/material.dart' as material;
 import 'package:mobile_controller/config/constants.dart';
 import 'package:mobile_controller/pages/setting_page.dart';
 import 'package:mobile_controller/style/theme.dart';
@@ -41,15 +42,36 @@ class _MyHomePageState extends State<MyHomePage> {
         title: () {
           if (kIsWeb) return const Text(Constants.windowTitle);
           return MoveWindow(
-            child: const Align(
-              alignment: Alignment.centerLeft,
-              child: Padding(
-                padding: EdgeInsets.only(left: 28.0),
-                child: Text(Constants.windowTitle, style: TextStyle(
-                  fontSize: 28,
-                  fontWeight: FontWeight.bold
-                ),),
-              ),
+            child: Row(
+              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+              children: [
+                Padding(
+                  padding: EdgeInsets.only(left: 28.0),
+                  child: Text(Constants.windowTitle, style: TextStyle(
+                    fontSize: 28,
+                    fontWeight: FontWeight.bold
+                  ),),
+                ),
+                Row(
+                  children: [
+                    Icon(material.Icons.arrow_drop_down),
+                    SizedBox(width: 8,),
+                    Text('无设备连接', style: FluentTheme.of(context).typography.body,),
+                    Padding(
+                      padding: EdgeInsets.only(right: 10.0, left: 10),
+                      child: Tooltip(
+                        message: 'Refresh devices',
+                        child: IconButton(
+                            onPressed: () {
+
+                            },
+                            icon: Icon(FluentIcons.refresh, size: 16),
+                        ),
+                      )
+                    ),
+                  ],
+                ),
+              ],
             ),
           );
         }(),
@@ -93,7 +115,7 @@ class _MyHomePageState extends State<MyHomePage> {
           PaneItemSeparator(),
           PaneItem(
             icon: const Icon(FluentIcons.connect_virtual_machine),
-            title: const Text('Connect Mobiles'),
+            title: const Text('Dashboard'),
           ),
           PaneItem(
             icon: const Icon(FluentIcons.mobile_angled),

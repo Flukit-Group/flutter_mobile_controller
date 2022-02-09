@@ -18,14 +18,17 @@ class CommandController {
     bool runInShell = false,
     String? workingDirectory
   }) async {
-    await checkEnv(executable: extArguments);
+    if (executable.isEmpty) {
+      executable = FileConfig.adbPath;
+    }
+    await checkEnv(executable: executable);
     var executor = CommandConfig.adbCommandExecutors[command];
     if (executor != null) {
-      var commandStr = executor.fullCommand;
+      var commandStr = executor.commandString();
       if (command == AdbCommand.customized) {
         logI('customized command: $extArguments', tag: 'CommandController');
       } else {
-        logI('execute command: $commandStr', tag: 'CommandController');
+        logI('execute command: $commandStr, cmdType: $command', tag: 'CommandController');
       }
       return executor.execute(executable: executable,
           extArguments: extArguments,

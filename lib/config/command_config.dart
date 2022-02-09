@@ -10,7 +10,7 @@ class CommandConfig {
   CommandConfig._();
 
   // Adb commands we used in app.
-  static const adbCmdDevList = 'devices';                                   // 已连接的设备列表
+  static const adbCmdDevList = 'devices -l';                                // 已连接的设备列表
   static const adbCmdWirelessConnect = 'connect';                           // 连接WLAN ip
   static const adbCmdWirelessDisconnect = 'disconnect';                     // 断开WLAN连接
   static const adbCmdVersion = 'version';                                   // 查看adb版本信息
