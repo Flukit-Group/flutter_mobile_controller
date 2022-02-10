@@ -1,6 +1,7 @@
 
 import 'package:mobile_controller/config/command_config.dart';
 import 'package:mobile_controller/model/execute_result.dart';
+import 'package:mobile_controller/scripts/script_ability.dart';
 import 'package:mobile_controller/utils/log_helper.dart';
 import '../config/file_config.dart';
 import '../utils/file_utils.dart';
@@ -38,6 +39,12 @@ class CommandController {
     } else {
       throw CommandRunException(message: 'can not find command: $command');
     }
+  }
+
+  // Run a script contains multi step commands.
+  static Future<ExecutionResult> runScript(List<Step<String>> stepList, {String scriptConfig = ''}) async {
+    var commandScript = CommandScript(stepList, 0);
+    return commandScript.process(scriptConfig);
   }
 
   // Check the environment of adb execution.
