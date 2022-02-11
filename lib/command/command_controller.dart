@@ -4,6 +4,7 @@ import 'package:mobile_controller/model/execute_result.dart';
 import 'package:mobile_controller/scripts/script_ability.dart';
 import 'package:mobile_controller/utils/log_helper.dart';
 import '../config/file_config.dart';
+import '../model/script_config_data.dart';
 import '../utils/file_utils.dart';
 
 /// Controller to manage command executions.
@@ -42,7 +43,7 @@ class CommandController {
   }
 
   // Run a script contains multi step commands.
-  static Future<ExecutionResult> runScript(List<Step<String>> stepList, {String scriptConfig = ''}) async {
+  static Future<ExecutionResult> runScript(List<Step<ScriptConfigModel>> stepList, ScriptConfigModel scriptConfig) async {
     var commandScript = CommandScript(stepList, 0);
     return commandScript.process(scriptConfig);
   }

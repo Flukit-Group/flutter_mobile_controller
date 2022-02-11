@@ -3,6 +3,7 @@ import 'package:fluent_ui/fluent_ui.dart';
 import 'package:flutter/material.dart' as material;
 import 'package:mobile_controller/command/command_controller.dart';
 import 'package:mobile_controller/config/command_config.dart';
+import 'package:mobile_controller/repository/wx_auto_reply_repo.dart';
 import 'package:mobile_controller/utils/log_helper.dart';
 
 class MobileConnectionPage extends StatefulWidget {
@@ -72,7 +73,22 @@ class _MobileConnectionPageState extends State<MobileConnectionPage> {
                       },
                     ),
                     SizedBox(height: 20,),
-                    Text('setting 2'),
+                    Button(
+                      child: Text('微信自动回复脚本测试'),
+                      onPressed: () {
+                        WxAutoReplyRepository().runScript().then((value) {
+                          logV('execute script result: $value');
+                          setState(() {
+                            _executionResult = 'Result >> ' + value.result.toString();
+                          });
+                        }).catchError((e) {
+                          setState(() {
+                            _executionResult = e.toString();
+                          });
+                          logE('catch error: ' + e.toString());
+                        });
+                      },
+                    ),
                     SizedBox(height: 20,),
                     Text('setting 3'),
                     SizedBox(height: 20,),

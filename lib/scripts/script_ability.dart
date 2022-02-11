@@ -1,6 +1,7 @@
 
 import 'package:mobile_controller/config/command_config.dart';
 import 'package:mobile_controller/model/execute_result.dart';
+import 'package:mobile_controller/model/script_config_data.dart';
 import 'package:mobile_controller/utils/log_helper.dart';
 
 /// Provides scripting capabilities composed of multiple command
@@ -8,20 +9,20 @@ import 'package:mobile_controller/utils/log_helper.dart';
 /// @author Dorck
 /// @date 2022/02/10
 /// TODO: Handle if middle step execute failed.
-class CommandScript implements Script<String> {
+class CommandScript implements Script<ScriptConfigModel> {
 
   CommandScript(this.steps, this.stepIndex);
 
-  final List<Step<String>> steps;
+  final List<Step<ScriptConfigModel>> steps;
   final int stepIndex;
 
   @override
-  ExecutionResult process(String configs) {
+  ExecutionResult process(ScriptConfigModel configs) {
     if (stepIndex <= 0 || stepIndex > steps.length) {
       throw CommandRunException(message: 'stepIndex is out of steps.length');
     }
     int curIndex = stepIndex;
-    Step<String>? curStep;
+    Step<ScriptConfigModel>? curStep;
     while(curIndex >= 0 && curIndex < steps.length) {
       curIndex ++;
     }
@@ -38,6 +39,8 @@ class CommandScript implements Script<String> {
 
 abstract class Step<T> {
   ExecutionResult run(T scriptConfigs, Script<T> script);
+
+  get stepName;
 }
 
 abstract class Script<R> {

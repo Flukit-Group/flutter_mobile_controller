@@ -9,12 +9,19 @@ A new Flutter project for PC to control mobiles by adb tool.
 - Provide a script to automate the control of Tiktok or any other apps
 - Multi-platform supported (MacOs, Windows, Linux)
 
-## Current Progress
+## Progress & Todo
 - [x] Terminal Technology Research
 - [x] UI framework construction on PC
 - [ ] Display connected device list
 - [ ] Query and display brief information about devices
 - [ ] Automatically control device sliding, input text, etc.
+- [ ] Construct steps of script by hand (set positions or input contents) without any code.
+- [ ] User can collect and customize any other commands.
+- [ ] Show script execution history records and quick run again.
+
+## Technology Design
+- Shield the input and output processing details of different commands through strategy mode
+- Use the Chain of Responsibility pattern to assemble different steps to generate scripting concepts
 
 ## Getting Started
 

@@ -17,6 +17,17 @@ class CommandConfig {
   static const adbCmdDeviceModel = 'shell getprop ro.product.model';        // 获取设备型号
   static const adbCmdSysVersion = 'shell getprop ro.build.version.release'; // 查看Android系统版本
 
+  // 查看前台应用的当前页面所属 Activity
+  static const adbCmdCurActivity = 'shell dumpsys activity top | grep ACTIVITY';
+  // 启动某个应用下的 Activity. e.g., `adb shell am start com.tencent.mm/.ui.LauncherUI`
+  static const adbCmdLaunchAppActivity = 'shell am start';
+  // 模拟点击操作 e.g., `adb shell input tap 100 100`
+  static const adbCmdInputTap = 'shell input tap';
+  // 拾取用户点击手机屏幕的位置坐标 e.g.
+  // /dev/input/event4: 0003 0035 000002c1 (x)
+  // /dev/input/event4: 0003 0036 0000091e (y)
+  static const adbCmdRecordTapPosition = 'getevent -c 10';
+
   // Instruction and Executor Mapping Table.
   static Map<AdbCommand, AdbCommandExecutor> get adbCommandExecutors => {
     AdbCommand.deviceList: DevicesListCommandExecutor(),

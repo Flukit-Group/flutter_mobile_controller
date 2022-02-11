@@ -25,10 +25,12 @@ class _MyHomePageState extends State<MyHomePage> {
   int index = 0;
 
   final settingsController = ScrollController();
+  final flyoutController = FlyoutController();
 
   @override
   void dispose() {
     settingsController.dispose();
+    flyoutController.dispose();
     super.dispose();
   }
 
@@ -48,7 +50,7 @@ class _MyHomePageState extends State<MyHomePage> {
                 Padding(
                   padding: EdgeInsets.only(left: 28.0),
                   child: Text(Constants.windowTitle, style: TextStyle(
-                    fontSize: 28,
+                    fontSize: 20,
                     fontWeight: FontWeight.bold
                   ),),
                 ),
@@ -56,16 +58,64 @@ class _MyHomePageState extends State<MyHomePage> {
                   children: [
                     Icon(material.Icons.arrow_drop_down),
                     SizedBox(width: 8,),
-                    Text('无设备连接', style: FluentTheme.of(context).typography.body,),
+                    Tooltip(
+                      message: 'Connected Devices',
+                      child: DropDownButton(
+                        controller: flyoutController,
+                        contentWidth: 150,
+                        leading: const Icon(FluentIcons.align_left),
+                        title: Text('无设备连接', style: FluentTheme.of(context).typography.body,),
+                        items: [
+                          DropDownButtonItem(
+                            title: const Text('Device A'),
+                            leading: Container(
+                              child: ClipOval(),
+                              width: 6,
+                              height: 6,
+                              color: Colors.green,
+                            ),
+                            onTap: () {},
+                          ),
+                          DropDownButtonItem(
+                            title: const Text('Device B'),
+                            leading: Container(
+                              child: ClipOval(),
+                              width: 6,
+                              height: 6,
+                              color: Colors.green,
+                            ),
+                            onTap: () {},
+                          ),
+                          DropDownButtonItem(
+                            title: const Text('Device C'),
+                            leading: Container(
+                              child: ClipOval(),
+                              width: 6,
+                              height: 6,
+                              color: Colors.red,
+                            ),
+                            onTap: () {},
+                          ),
+                        ],
+                      ),
+                    ),
                     Padding(
                       padding: EdgeInsets.only(right: 10.0, left: 10),
                       child: Tooltip(
                         message: 'Refresh devices',
                         child: IconButton(
-                            onPressed: () {
+                          onPressed: () {
 
-                            },
-                            icon: Icon(FluentIcons.refresh, size: 16),
+                          },
+                          icon: Icon(FluentIcons.refresh, size: 16),
+                          style: ButtonStyle(
+                            border: ButtonState.all(
+                              BorderSide(
+                                color: FluentTheme.of(context).typography.title?.color?.withOpacity(0.2) ?? Colors.black.withOpacity(0.12),
+                                width: 0.6
+                              )
+                            ),
+                          ),
                         ),
                       )
                     ),
