@@ -4,11 +4,15 @@ import 'package:bitsdojo_window/bitsdojo_window.dart';
 import 'package:fluent_ui/fluent_ui.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart' as material;
+import 'package:mobile_controller/config/command_config.dart';
 import 'package:mobile_controller/config/constants.dart';
+import 'package:mobile_controller/model/device_result.dart';
 import 'package:mobile_controller/pages/setting_page.dart';
 import 'package:mobile_controller/style/theme.dart';
+import 'package:mobile_controller/utils/log_helper.dart';
 import 'package:provider/src/provider.dart';
 import 'package:url_launcher/link.dart';
+import 'package:mobile_controller/command/command_controller.dart';
 
 import 'mobile_connections_page.dart';
 
@@ -26,6 +30,26 @@ class _MyHomePageState extends State<MyHomePage> {
 
   final settingsController = ScrollController();
   final flyoutController = FlyoutController();
+  List<DeviceResult> _connectedDevList = [];
+
+  @override
+  void initState() {
+    _refreshDevList();
+    super.initState();
+  }
+
+  _refreshDevList() {
+    CommandController.executeAdbCommand(AdbCommand.deviceList).then((value) {
+      logV('execute cmd result: adb devices >> $value');
+      if (value.succeed) {
+        setState(() {
+          _connectedDevList = value.result;
+        });
+      }
+    }).catchError((e) {
+      logE('catch error: ' + e.toString());
+    });
+  }
 
   @override
   void dispose() {
@@ -37,6 +61,24 @@ class _MyHomePageState extends State<MyHomePage> {
   @override
   Widget build(BuildContext context) {
     final appTheme = context.watch<AppTheme>();
+    final noDeviceButton = Button(
+        child: Text('无设备连接'),
+        onPressed: () {
+          _refreshDevList();
+        }
+    );
+    final List<DropDownButtonItem> dropItems = List.generate(_connectedDevList.length, (index) => DropDownButtonItem(
+      title: Text(_connectedDevList[index].devName!, softWrap: true,),
+      leading: Container(
+        width: 6,
+        height: 6,
+        decoration: BoxDecoration(
+            borderRadius: BorderRadius.circular(6),
+            color: _connectedDevList[index].online ? Colors.green : Colors.red
+        ),
+      ),
+      onTap: () {},
+    ));
     return NavigationView(
       appBar: NavigationAppBar(
         automaticallyImplyLeading: false,
@@ -56,47 +98,14 @@ class _MyHomePageState extends State<MyHomePage> {
                 ),
                 Row(
                   children: [
-                    Icon(material.Icons.arrow_drop_down),
-                    SizedBox(width: 8,),
                     Tooltip(
                       message: 'Connected Devices',
-                      child: DropDownButton(
+                      child: dropItems.isEmpty ? noDeviceButton : DropDownButton(
                         controller: flyoutController,
-                        contentWidth: 150,
-                        leading: const Icon(FluentIcons.align_left),
-                        title: Text('无设备连接', style: FluentTheme.of(context).typography.body,),
-                        items: [
-                          DropDownButtonItem(
-                            title: const Text('Device A'),
-                            leading: Container(
-                              child: ClipOval(),
-                              width: 6,
-                              height: 6,
-                              color: Colors.green,
-                            ),
-                            onTap: () {},
-                          ),
-                          DropDownButtonItem(
-                            title: const Text('Device B'),
-                            leading: Container(
-                              child: ClipOval(),
-                              width: 6,
-                              height: 6,
-                              color: Colors.green,
-                            ),
-                            onTap: () {},
-                          ),
-                          DropDownButtonItem(
-                            title: const Text('Device C'),
-                            leading: Container(
-                              child: ClipOval(),
-                              width: 6,
-                              height: 6,
-                              color: Colors.red,
-                            ),
-                            onTap: () {},
-                          ),
-                        ],
+                        contentWidth: 180,
+                        leading: const Icon(FluentIcons.cell_phone),
+                        title: Text(_connectedDevList.isEmpty ? '无设备连接' : _connectedDevList[0].devName!, style: FluentTheme.of(context).typography.body,),
+                        items: dropItems,
                       ),
                     ),
                     Padding(
@@ -180,9 +189,10 @@ class _MyHomePageState extends State<MyHomePage> {
             icon: const Icon(FluentIcons.trending12),
             title: const Text('Trending'),
           ),
-          PaneItem(
+          _LinkPaneItemAction(
             icon: const Icon(FluentIcons.bug),
             title: const Text('Report a Bug'),
+            link: 'https://github.com/Moosphan/flutter_mobile_controller/issues/new'
           ),
           PaneItem(
             icon: Icon(
@@ -210,7 +220,7 @@ class _MyHomePageState extends State<MyHomePage> {
           _LinkPaneItemAction(
             icon: const Icon(FluentIcons.alert_solid),
             title: const Text('Source code'),
-            link: 'https://github.com/bdlukaa/fluent_ui',
+            link: 'https://github.com/Moosphan/flutter_mobile_controller',
           ),
         ],
       ),
@@ -266,7 +276,10 @@ class WindowButtons extends StatelessWidget {
             }
             return MaximizeIcon(color: context.iconColor);
           },
-          onPressed: appWindow.maximizeOrRestore,
+          onPressed: () {
+            logI('max or min window');
+            appWindow.maximizeOrRestore;
+          },
         ),
       ),
       Tooltip(

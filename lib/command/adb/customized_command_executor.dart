@@ -24,7 +24,7 @@ class CustomizedAdbCommandExecutor extends AdbCommandExecutor {
     String? workingDirectory}) {
     customizedCommand = extArguments;
     return super.execute(executable: executable,
-        extArguments: extArguments,
+        extArguments: '',
         synchronous: synchronous,
         runInShell: runInShell,
         workingDirectory: workingDirectory);

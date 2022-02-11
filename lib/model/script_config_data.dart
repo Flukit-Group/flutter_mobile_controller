@@ -10,12 +10,23 @@ class ScriptConfigModel {
   ScriptConfigModel(this.name, this.stepConfigs, {this.description});
 }
 
+// Config model of each step executions.
 class StepConfigModel {
   String? additionalAction;
   int? timeout;
   int? delayTime;
   int? priority;
   String mark;
+  bool shouldLoop;
+  Duration loopDuration;
+  int loopLimit;
 
-  StepConfigModel(this.mark, {this.additionalAction, this.priority, this.timeout, this.delayTime});
+  StepConfigModel(this.mark, {this.additionalAction,
+    this.priority,
+    this.timeout,
+    this.delayTime,
+    this.shouldLoop = false,
+    this.loopDuration = const Duration(milliseconds: 6000),
+    this.loopLimit = -1,
+  });
 }

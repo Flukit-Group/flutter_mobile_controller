@@ -17,32 +17,32 @@ class CommandScript implements Script<ScriptConfigModel> {
   final int stepIndex;
 
   @override
-  ExecutionResult process(ScriptConfigModel configs) {
-    if (stepIndex <= 0 || stepIndex > steps.length) {
-      throw CommandRunException(message: 'stepIndex is out of steps.length');
+  Future<ExecutionResult> process(ScriptConfigModel configs) async {
+    logV('step index: $stepIndex');
+    if (stepIndex < 0 || stepIndex > steps.length) {
+      throw CommandRunException(message: 'stepIndex $stepIndex is out of steps.length');
     }
     int curIndex = stepIndex;
     Step<ScriptConfigModel>? curStep;
-    while(curIndex >= 0 && curIndex < steps.length) {
+    while(curIndex >= 0 && curIndex < steps.length && (curStep = steps[curIndex]) == null) {
       curIndex ++;
     }
-    curStep = steps[curIndex];
     if (curStep != null) {
-      return curStep.run(configs, CommandScript(steps, curIndex + 1));
+      return await curStep.run(configs, CommandScript(steps, curIndex + 1));
     }
-    var error = 'can not find available steps to execute.';
-    logE(error, tag: 'CommandScript');
-    return ExecutionResult.from('', false, error);
+    var msg = 'can not find available steps to execute.';
+    logD(msg, tag: 'CommandScript');
+    return ExecutionResult.from(configs.toString(), true, msg);
   }
 
 }
 
 abstract class Step<T> {
-  ExecutionResult run(T scriptConfigs, Script<T> script);
+  Future<ExecutionResult> run(T scriptConfigs, Script<T> script);
 
   get stepName;
 }
 
 abstract class Script<R> {
-  ExecutionResult process(R scriptConfigs);
+  Future<ExecutionResult> process(R scriptConfigs);
 }

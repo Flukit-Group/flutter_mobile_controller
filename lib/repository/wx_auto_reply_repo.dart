@@ -18,16 +18,20 @@ class WxAutoReplyRepository {
     ),
   });
 
-  List<Step<ScriptConfigModel>> stepList = [
+  List<Step<ScriptConfigModel>> openLiveTabStepList = [
     LaunchAppStep(StepConfigModel('launch_app',
       additionalAction: 'com.tencent.mm/.ui.LauncherUI',)),
     TapStep(StepConfigModel('tap_position',
-      additionalAction: '947 2318',)),
-
+      additionalAction: '684 2318',)),
+    TapStep(StepConfigModel('tap_position',
+      additionalAction: '556 624',
+      shouldLoop: true,
+      loopLimit: 3
+    )),
   ];
 
 
-  Future<ExecutionResult> runScript() async {
-    return await CommandController.runScript(stepList, scriptConfigModel);
+  Future<ExecutionResult> openLiveEntrance() async {
+    return await CommandController.runScript(openLiveTabStepList, scriptConfigModel);
   }
 }

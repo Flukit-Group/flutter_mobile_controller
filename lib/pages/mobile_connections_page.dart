@@ -76,17 +76,18 @@ class _MobileConnectionPageState extends State<MobileConnectionPage> {
                     Button(
                       child: Text('微信自动回复脚本测试'),
                       onPressed: () {
-                        WxAutoReplyRepository().runScript().then((value) {
+                        WxAutoReplyRepository().openLiveEntrance().then((value) {
                           logV('execute script result: $value');
                           setState(() {
-                            _executionResult = 'Result >> ' + value.result.toString();
+                            _executionResult = 'Result >> ' + value.toString();
                           });
-                        }).catchError((e) {
-                          setState(() {
-                            _executionResult = e.toString();
-                          });
-                          logE('catch error: ' + e.toString());
                         });
+                        //     .catchError((e) {
+                        //   setState(() {
+                        //     _executionResult = e.toString();
+                        //   });
+                        //   logE('catch error: ' + e.toString());
+                        // });
                       },
                     ),
                     SizedBox(height: 20,),

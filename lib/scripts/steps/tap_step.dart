@@ -1,27 +1,27 @@
 
+import 'dart:async';
 import 'package:mobile_controller/model/execute_result.dart';
 import 'package:mobile_controller/model/script_config_data.dart';
-import 'package:mobile_controller/scripts/script_ability.dart';
+import 'package:mobile_controller/scripts/steps/base_step.dart';
 import '../../command/command_controller.dart';
 import '../../config/command_config.dart';
 
-class TapStep implements Step<ScriptConfigModel> {
-  final StepConfigModel stepConfig;
-  TapStep(this.stepConfig);
+class TapStep extends BaseStepTask {
 
-  @override
-  ExecutionResult run(ScriptConfigModel scriptConfigs, Script<ScriptConfigModel> script) {
-    //var stepConfig = scriptConfigs.stepConfigs[stepName];
+  TapStep(StepConfigModel stepConfig) : super(stepConfig);
+
+  _executeCmd() async {
     var commandContent = CommandConfig.adbCmdInputTap + " "
         + (stepConfig.additionalAction ?? '');
-    CommandController.executeAdbCommand(AdbCommand.customized, extArguments: commandContent).then((value) {
-      return value;
-    });
-    return script.process(scriptConfigs);
-    //return ExecutionResult.from('command', false, 'can not execute');
+    await CommandController.executeAdbCommand(AdbCommand.customized, extArguments: commandContent);
   }
 
   @override
   get stepName => 'tap_position';
+
+  @override
+  Future<void> executeCmd(ScriptConfigModel scriptConfigs) async {
+    await _executeCmd();
+  }
 
 }

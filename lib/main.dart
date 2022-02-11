@@ -26,7 +26,9 @@ void main() async {
   WidgetsFlutterBinding.ensureInitialized();
   CommonConfig.initAppVersion();
   await InitializerHelper.init(CommonConfig.configs);
-  runApp(const MyApp());
+  Future.delayed(const Duration(milliseconds: 100), () {
+    runApp(const MyApp());
+  });
 
   if (isDesktop) {
     doWhenWindowReady(() {

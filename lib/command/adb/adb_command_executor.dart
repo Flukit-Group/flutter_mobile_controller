@@ -40,9 +40,9 @@ abstract class AdbCommandExecutor {
         args = ["-s", CommonConfig.currentAndroidDevice, ...args];
       }
     }
-    logI('executable: $executable, arguments: $args', tag: 'AdbCommandExecutor');
     var processResult = await _runCmd(args, executable: executable,
         synchronous: synchronous, runInShell: runInShell, workingDirectory: workingDirectory);
+    logI('executable: $executable, arguments: $args, output: ${processResult.stdout}', tag: 'AdbCommandExecutor');
     // Check for multi devices operation at same time.
     if (processResult.stderr != "") {
       if (processResult.stderr
