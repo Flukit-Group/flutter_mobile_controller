@@ -23,6 +23,14 @@ class CommandConfig {
   static const adbCmdLaunchAppActivity = 'shell am start';
   // 模拟点击操作 e.g., `adb shell input tap 100 100`
   static const adbCmdInputTap = 'shell input tap';
+  // 模拟文本输入 (问题：无法输入中文)
+  static const adbCmdInputText = 'shell input text';
+  // 模拟键盘按键触发
+  static const adbCmdInputKeyboard = 'shell input keyevent';
+  // 模拟文本输入 (适配中文) solution see: https://github.com/senzhk/ADBKeyBoard
+  static const adbCmdInputTextByBroadcast = 'shell am broadcast -a ADB_INPUT_TEXT --es msg';
+  // 判断apk是否安装
+  static const adbCmdPackageIsInstalled = 'adb shell pm list packages';
   // 拾取用户点击手机屏幕的位置坐标 e.g.
   // /dev/input/event4: 0003 0035 000002c1 (x)
   // /dev/input/event4: 0003 0036 0000091e (y)

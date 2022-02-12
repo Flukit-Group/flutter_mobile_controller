@@ -48,6 +48,12 @@ class CommandController {
     return commandScript.process(scriptConfig);
   }
 
+  // Group control with script on multi devices.
+  static Future<ExecutionResult> groupControlWithScript(List<Step<ScriptConfigModel>> stepList, ScriptConfigModel scriptConfig) async {
+    var commandScript = CommandScript(stepList, 0);
+    return commandScript.process(scriptConfig);
+  }
+
   // Check the environment of adb execution.
   static Future<void> checkEnv({String executable = ""}) async {
     if (FileConfig.adbPath == "") {

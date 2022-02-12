@@ -1,6 +1,7 @@
 # mobile_controller
 
 A new Flutter project for PC to control mobiles by adb tool.
+> Develop in progress, not release yet...
 
 ## Features
 - Provide computer control mobile phone shortcut keys

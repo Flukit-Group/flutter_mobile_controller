@@ -16,6 +16,11 @@ abstract class BaseStepTask implements Step<ScriptConfigModel> {
   @override
   Future<ExecutionResult> run(ScriptConfigModel scriptConfigs, Script<ScriptConfigModel> script) async {
     logI('Run step of $stepName' ,tag: 'BaseStepTask');
+    // TODO: If not legal, should we intercept this script or continue.
+    if (!await isLegal()) {
+      logW('the env checks illegal !');
+      return errorResult(stepConfig.toString());
+    }
     if (stepConfig.shouldLoop) {
       await loop(scriptConfigs, stepConfig.loopDuration, stepConfig.loopLimit);
     } else {
@@ -24,8 +29,15 @@ abstract class BaseStepTask implements Step<ScriptConfigModel> {
     return script.process(scriptConfigs);
   }
 
+  // Determine whether the current environment meets the execution conditions.
+  Future<bool> isLegal() async {
+    return true;
+  }
+
   // Children need to implement the cmd executions.
   Future<void> executeCmd(ScriptConfigModel scriptConfigs);
+
+  ExecutionResult errorResult(String errorMsg) => ExecutionResult.from('', false, errorMsg);
 
   loop(scriptConfig, duration, limit) async {
     // var timer = Timer.periodic(duration, (timer) async {

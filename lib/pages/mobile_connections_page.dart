@@ -74,7 +74,7 @@ class _MobileConnectionPageState extends State<MobileConnectionPage> {
                     ),
                     SizedBox(height: 20,),
                     Button(
-                      child: Text('微信自动回复脚本测试'),
+                      child: Text('微信自动打开首条直播间脚本测试'),
                       onPressed: () {
                         WxAutoReplyRepository().openLiveEntrance().then((value) {
                           logV('execute script result: $value');
@@ -91,7 +91,23 @@ class _MobileConnectionPageState extends State<MobileConnectionPage> {
                       },
                     ),
                     SizedBox(height: 20,),
-                    Text('setting 3'),
+                    Button(
+                      child: Text('微信自动回复脚本测试'),
+                      onPressed: () {
+                        WxAutoReplyRepository().autoReplyAtFirstLiveShow().then((value) {
+                          logV('execute script result: $value');
+                          setState(() {
+                            _executionResult = 'Result >> ' + value.toString();
+                          });
+                        });
+                        //     .catchError((e) {
+                        //   setState(() {
+                        //     _executionResult = e.toString();
+                        //   });
+                        //   logE('catch error: ' + e.toString());
+                        // });
+                      },
+                    ),
                     SizedBox(height: 20,),
                     Text('setting 4'),
                     SizedBox(height: 20,),
