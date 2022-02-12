@@ -57,7 +57,7 @@ class WxAutoReplyRepository {
   }
 
   Future<ExecutionResult> autoReplyAtFirstLiveShow() async {
-    var autoReplyStepList = List<Step<ScriptConfigModel>>.empty();
+    List<Step<ScriptConfigModel>> autoReplyStepList = [];
     var loopRunnerSteps = [
       // click comment button
       StepConfigModel(
@@ -68,10 +68,6 @@ class WxAutoReplyRepository {
       StepConfigModel(
           'text_input',
           additionalAction: 'random',
-          delayTime: 3000,
-          shouldLoop: true,
-          loopDuration: Duration(microseconds: 3500),
-          loopLimit: 5
       ),
       // click send button
       StepConfigModel(
@@ -83,9 +79,10 @@ class WxAutoReplyRepository {
     runnerConfig.children = loopRunnerSteps;
     runnerConfig.shouldLoop = true;
     runnerConfig.loopLimit = 5;
-    runnerConfig.loopDuration = Duration(microseconds: 3500);
+    runnerConfig.loopDuration = Duration(milliseconds: 5000);
     var loopCommentRunner = TextSenderRunner(runnerConfig);
-    autoReplyStepList.addAll(openLiveTabStepList..add(loopCommentRunner));
+    autoReplyStepList.addAll(openLiveTabStepList);
+    autoReplyStepList.add(loopCommentRunner);
     return await CommandController.runScript(autoReplyStepList, scriptConfigModel);
   }
 

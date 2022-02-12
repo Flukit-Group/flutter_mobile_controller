@@ -7,6 +7,7 @@ import 'package:flutter/material.dart' as material;
 import 'package:mobile_controller/config/command_config.dart';
 import 'package:mobile_controller/config/constants.dart';
 import 'package:mobile_controller/model/device_result.dart';
+import 'package:mobile_controller/pages/recommend_scripts_page.dart';
 import 'package:mobile_controller/pages/setting_page.dart';
 import 'package:mobile_controller/style/theme.dart';
 import 'package:mobile_controller/utils/log_helper.dart';
@@ -81,56 +82,60 @@ class _MyHomePageState extends State<MyHomePage> {
     ));
     return NavigationView(
       appBar: NavigationAppBar(
+        height: 64,
         automaticallyImplyLeading: false,
         // height: !kIsWeb ? appWindow.titleBarHeight : 31.0,
         title: () {
           if (kIsWeb) return const Text(Constants.windowTitle);
-          return MoveWindow(
-            child: Row(
-              mainAxisAlignment: MainAxisAlignment.spaceBetween,
-              children: [
-                Padding(
-                  padding: EdgeInsets.only(left: 28.0),
-                  child: Text(Constants.windowTitle, style: TextStyle(
-                    fontSize: 20,
-                    fontWeight: FontWeight.bold
-                  ),),
-                ),
-                Row(
-                  children: [
-                    Tooltip(
-                      message: 'Connected Devices',
-                      child: dropItems.isEmpty ? noDeviceButton : DropDownButton(
-                        controller: flyoutController,
-                        contentWidth: 180,
-                        leading: const Icon(FluentIcons.cell_phone),
-                        title: Text(_connectedDevList.isEmpty ? '无设备连接' : _connectedDevList[0].devName!, style: FluentTheme.of(context).typography.body,),
-                        items: dropItems,
+          return Padding(
+            padding: EdgeInsets.only(top: appWindow.titleBarHeight),
+            child: MoveWindow(
+              child: Row(
+                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                children: [
+                  Padding(
+                    padding: EdgeInsets.only(left: 28.0),
+                    child: Text(Constants.windowTitle, style: TextStyle(
+                      fontSize: 20,
+                      fontWeight: FontWeight.bold
+                    ),),
+                  ),
+                  Row(
+                    children: [
+                      Tooltip(
+                        message: 'Connected Devices',
+                        child: dropItems.isEmpty ? noDeviceButton : DropDownButton(
+                          controller: flyoutController,
+                          contentWidth: 180,
+                          leading: const Icon(FluentIcons.cell_phone),
+                          title: Text(_connectedDevList.isEmpty ? '无设备连接' : _connectedDevList[0].devName!, style: FluentTheme.of(context).typography.body,),
+                          items: dropItems,
+                        ),
                       ),
-                    ),
-                    Padding(
-                      padding: EdgeInsets.only(right: 10.0, left: 10),
-                      child: Tooltip(
-                        message: 'Refresh devices',
-                        child: IconButton(
-                          onPressed: () {
+                      Padding(
+                        padding: EdgeInsets.only(right: 10.0, left: 10),
+                        child: Tooltip(
+                          message: 'Refresh devices',
+                          child: IconButton(
+                            onPressed: () {
 
-                          },
-                          icon: Icon(FluentIcons.refresh, size: 16),
-                          style: ButtonStyle(
-                            border: ButtonState.all(
-                              BorderSide(
-                                color: FluentTheme.of(context).typography.title?.color?.withOpacity(0.2) ?? Colors.black.withOpacity(0.12),
-                                width: 0.6
-                              )
+                            },
+                            icon: Icon(FluentIcons.refresh, size: 16),
+                            style: ButtonStyle(
+                              border: ButtonState.all(
+                                BorderSide(
+                                  color: FluentTheme.of(context).typography.title?.color?.withOpacity(0.2) ?? Colors.black.withOpacity(0.12),
+                                  width: 0.6
+                                )
+                              ),
                             ),
                           ),
-                        ),
-                      )
-                    ),
-                  ],
-                ),
-              ],
+                        )
+                      ),
+                    ],
+                  ),
+                ],
+              ),
             ),
           );
         }(),
@@ -186,8 +191,8 @@ class _MyHomePageState extends State<MyHomePage> {
           ),
           PaneItemSeparator(),
           PaneItem(
-            icon: const Icon(FluentIcons.trending12),
-            title: const Text('Trending'),
+            icon: const Icon(FluentIcons.cost_control),
+            title: const Text('Sample Scripts'),
           ),
           _LinkPaneItemAction(
             icon: const Icon(FluentIcons.bug),
@@ -228,7 +233,7 @@ class _MyHomePageState extends State<MyHomePage> {
         const MobileConnectionPage(),
         const Placeholder(),
         const Placeholder(),
-        const Placeholder(),
+        const RecommendScriptsPage(),
         const Placeholder(),
         const Placeholder(),
         const SettingsPage(),

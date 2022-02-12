@@ -8,6 +8,7 @@ import 'package:mobile_controller/utils/log_helper.dart';
 /// Note that step task run finished without result.
 /// @author Dorck
 /// @date 2022/02/11
+/// TODO: Get command configs from json config.
 abstract class BaseStepTask implements Step<ScriptConfigModel> {
   final StepConfigModel stepConfig;
   int _runCount = 0;
@@ -50,6 +51,7 @@ abstract class BaseStepTask implements Step<ScriptConfigModel> {
     //   }
     // });
     // Return until all loop tasks run finished.
+    logV('loop duration is: ${duration}');
     while ((_runCount = _runCount + 1) <= limit) {
       logI('run step execution :$stepName in looper, counter times: $_runCount');
       await Future.delayed(duration, () async {

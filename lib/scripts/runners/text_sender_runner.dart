@@ -3,6 +3,7 @@ import 'package:mobile_controller/model/script_config_data.dart';
 import 'package:mobile_controller/repository/wx_auto_reply_repo.dart';
 import 'package:mobile_controller/scripts/script_ability.dart';
 import 'package:mobile_controller/scripts/steps/base_step.dart';
+import 'package:mobile_controller/utils/log_helper.dart';
 import '../../command/command_controller.dart';
 
 /// A special [Step] that can combine any number of steps into a runner for execution.

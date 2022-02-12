@@ -14,12 +14,15 @@ class DeviceResult {
     for (var element in arguments) {
       if (element.contains('usb:')) {
         usbPort = element.replaceFirst('usb:', '');
+        connectType = ConnectType.usb;
       } else if (element.contains('device:')) {
         devName = element.replaceFirst('device:', '');
       } else if (element.contains('model:')) {
         modelType = element.replaceFirst('model:', '');
       } else if (element.contains('offline')) {
         online = false;
+      } else if (element.contains('wifi')) {
+        connectType = ConnectType.wifi;
       }
     }
   }
@@ -29,9 +32,14 @@ class DeviceResult {
   String serial = '';
   String? usbPort;
   bool online = true;
-
+  ConnectType? connectType;
 
   @override
   String toString() =>
-      'Device{devName: $devName, model: $modelType, serial: $serial, online: $online, usbPort: $usbPort}';
+      'Device{devName: $devName, model: $modelType, serial: $serial, online: $online, usbPort: $usbPort, connectType: $connectType}';
+}
+
+enum ConnectType {
+  wifi,
+  usb
 }

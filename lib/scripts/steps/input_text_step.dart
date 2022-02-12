@@ -4,6 +4,7 @@ import 'dart:math';
 import 'package:mobile_controller/model/script_config_data.dart';
 import 'package:mobile_controller/repository/common_repository.dart';
 import 'package:mobile_controller/scripts/steps/base_step.dart';
+import 'package:mobile_controller/utils/log_helper.dart';
 import '../../command/command_controller.dart';
 import '../../config/command_config.dart';
 
@@ -21,6 +22,7 @@ class InputTextStep extends BaseStepTask {
       // Read random content from configs.
       var dataSource = CommonDataRepository().defaultReplyList;
       msg = dataSource[Random().nextInt(dataSource.length)];
+      logV('comment content: $msg');
     }
     var finalCmd = commandContent + msg;
     await CommandController.executeAdbCommand(AdbCommand.customized, extArguments: finalCmd);
@@ -32,7 +34,9 @@ class InputTextStep extends BaseStepTask {
     var result = (await CommandController.executeAdbCommand(AdbCommand.customized,
         extArguments: CommandConfig.adbCmdPackageIsInstalled + ' ' + adbKeyBoardPackage
     )).toString();
-    return result.contains(adbKeyBoardPackage);
+    var ready = result.contains(adbKeyBoardPackage);
+    //logI('The AdbKeyboard is installed: $ready');
+    return ready;
   }
 
   @override
