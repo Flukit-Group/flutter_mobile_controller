@@ -4,6 +4,7 @@ import 'dart:io';
 import 'package:mobile_controller/command/adb/adb_command_executor.dart';
 import 'package:mobile_controller/config/command_config.dart';
 import 'package:mobile_controller/model/execute_result.dart';
+import 'package:mobile_controller/utils/log_helper.dart';
 import 'package:mobile_controller/utils/platform_adapt_utils.dart';
 
 /// Query the ip address of Android device.
@@ -18,6 +19,7 @@ class IpAddressCommandExecutor extends AdbCommandExecutor {
   @override
   ExecutionResult? processData(ProcessResult originData) {
     String output = originData.stdout;
+    logI('output of ip address: $output');
     String addr = _extractAddress(output);
     if (!output.contains('inet addr:') || addr.isEmpty) {
       return ExecutionResult.from(fullCommand, false, "Can not get ip addr of wlan", originData: originData);

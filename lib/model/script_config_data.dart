@@ -15,7 +15,7 @@ class ScriptConfigModel {
 class StepConfigModel {
   String? additionalAction;
   int? timeout;
-  int? delayTime;
+  Duration? delayTime;
   int? priority;
   String mark;
   bool shouldLoop;

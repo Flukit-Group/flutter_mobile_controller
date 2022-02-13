@@ -23,7 +23,7 @@ class TapStep extends BaseStepTask {
   get stepName => 'tap_position';
 
   @override
-  Future<ExecutionResult> executeCmd(ScriptConfigModel scriptConfigs) async {
+  Future<ExecutionResult> executeCmd(ExecutionResult previousResult, ScriptConfigModel scriptConfigs) async {
     return await _executeCmd();
   }
 

@@ -18,6 +18,8 @@ class AdbScriptsRepository {
       ),
       StepConfigModel(
         'get_ip_addr',
+        // We need set a delayed operation to confirm adb gets ready.
+        delayTime: const Duration(milliseconds: 2000),
       ),
       StepConfigModel(
         'wifi_connect',

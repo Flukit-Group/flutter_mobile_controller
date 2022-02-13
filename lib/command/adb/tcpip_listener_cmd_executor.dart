@@ -4,6 +4,7 @@ import 'dart:io';
 import 'package:mobile_controller/command/adb/adb_command_executor.dart';
 import 'package:mobile_controller/config/command_config.dart';
 import 'package:mobile_controller/model/execute_result.dart';
+import 'package:mobile_controller/utils/log_helper.dart';
 
 /// Set the target device to listen for TCP/IP connections on port 5555.
 /// @author Dorck

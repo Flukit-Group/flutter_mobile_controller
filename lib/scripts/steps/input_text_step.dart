@@ -15,7 +15,7 @@ class InputTextStep extends BaseStepTask {
   InputTextStep(StepConfigModel stepConfig) : super(stepConfig);
 
   @override
-  Future<ExecutionResult> executeCmd(ScriptConfigModel scriptConfigs) async {
+  Future<ExecutionResult> executeCmd(ExecutionResult previousResult, ScriptConfigModel scriptConfigs) async {
     var commandContent = CommandConfig.adbCmdInputTextByBroadcast + " ";
     // todo: provide interceptor ability from [ScriptConfigModel]
     var msg = '';

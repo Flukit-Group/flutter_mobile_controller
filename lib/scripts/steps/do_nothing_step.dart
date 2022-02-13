@@ -7,7 +7,7 @@ class NothingToDoStep extends BaseStepTask {
   NothingToDoStep(StepConfigModel stepConfig) : super(stepConfig);
 
   @override
-  Future<ExecutionResult> executeCmd(ScriptConfigModel scriptConfigs) async {
+  Future<ExecutionResult> executeCmd(ExecutionResult previousResult, ScriptConfigModel scriptConfigs) async {
     // do nothing
     return successResult(null);
   }

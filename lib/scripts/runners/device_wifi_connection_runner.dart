@@ -1,6 +1,8 @@
 
+import 'package:mobile_controller/model/execute_result.dart';
 import 'package:mobile_controller/model/script_config_data.dart';
 import 'package:mobile_controller/scripts/steps/base_step.dart';
+import 'package:mobile_controller/utils/log_helper.dart';
 import '../../command/command_controller.dart';
 import '../../config/command_config.dart';
 import '../script_ability.dart';
@@ -21,22 +23,25 @@ class DevWifiConnectionRunner extends BaseRunner {
     var childrenConfigs = runnerConfigModel.children!;
     return List.generate(childrenConfigs.length, (index) {
       var stepConfig = childrenConfigs[index];
-      return SimpleCustomizedStep(stepConfig, (stepConfig, scriptConfig) async {
+      return SimpleCustomizedStep(stepConfig, (preResult, stepConfig, scriptConfig) async {
+        logI('pre step execute result: $preResult');
         if (stepConfig.mark == 'get_ip_addr') {
-          var result = await CommandController.executeAdbCommand(AdbCommand.getIpAddress);
-          if (result.succeed) {
-            // Pass the parameter with the return value to the next step.
-            scriptConfig.additionalActions!['wifi_connect'] = result.result.toString();
-            return result;
-          }
+          return await CommandController.executeAdbCommand(AdbCommand.getIpAddress, runInShell: true);
         } else if (stepConfig.mark == 'wifi_connect') {
           // Get ip address and connect.
-          String cmdExtArgs = scriptConfig.additionalActions![stepConfig.mark]! + ':'
-              + CommandConfig.defaultConnectionPort;
-          var result = await CommandController.executeAdbCommand(AdbCommand.wifiConnection, extArguments: cmdExtArgs);
-          return result;
+          // String cmdExtArgs = scriptConfig.additionalActions![stepConfig.mark]! + ':'
+          //     + CommandConfig.defaultConnectionPort;
+          if (preResult.succeed) {
+            String cmdExtArgs = preResult.result + ':'
+                + CommandConfig.defaultConnectionPort;
+            var result = await CommandController.executeAdbCommand(AdbCommand.wifiConnection, extArguments: cmdExtArgs);
+            return result;
+          } else {
+            return ExecutionResult.from(stepConfig.mark, false, 'Ip address get failed, runner stopped');
+          }
+
         }
-        return CommandController.executeAdbCommand(AdbCommand.tcpipPortConfig);
+        return await CommandController.executeAdbCommand(AdbCommand.tcpipPortConfig);
       });
     });
   }

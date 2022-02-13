@@ -18,7 +18,7 @@ class CommandScript implements Script<ScriptConfigModel> {
   final int stepIndex;
 
   @override
-  Future<ExecutionResult> process(ScriptConfigModel configs) async {
+  Future<ExecutionResult> process(ExecutionResult? previousResult, ScriptConfigModel configs) async {
     logV('step index: $stepIndex');
     if (stepIndex < 0 || stepIndex > steps.length) {
       throw CommandRunException(message: 'stepIndex $stepIndex is out of steps.length');
@@ -29,21 +29,21 @@ class CommandScript implements Script<ScriptConfigModel> {
       curIndex ++;
     }
     if (curStep != null) {
-      return await curStep.stepForward(configs, CommandScript(steps, curIndex + 1));
+      return await curStep.stepForward(previousResult!, configs, CommandScript(steps, curIndex + 1));
     }
     var msg = 'can not find available steps to execute.';
     logD(msg, tag: 'CommandScript');
-    return ExecutionResult.from(configs.toString(), true, msg);
+    return previousResult ?? ExecutionResult.from(configs.toString(), true, msg);
   }
 
 }
 
 abstract class Step<T> {
-  Future<ExecutionResult> stepForward(T scriptConfigs, Script<T> script);
+  Future<ExecutionResult> stepForward(ExecutionResult previousResult, T scriptConfigs, Script<T> script);
 
   get stepName;
 }
 
 abstract class Script<R> {
-  Future<ExecutionResult> process(R scriptConfigs);
+  Future<ExecutionResult> process(ExecutionResult previousResult, R scriptConfigs);
 }

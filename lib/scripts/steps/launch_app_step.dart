@@ -15,7 +15,7 @@ class LaunchAppStep extends BaseStepTask {
   get stepName => 'launch_app';
 
   @override
-  Future<ExecutionResult> executeCmd(ScriptConfigModel scriptConfigs) async {
+  Future<ExecutionResult> executeCmd(ExecutionResult previousResult, ScriptConfigModel scriptConfigs) async {
     var commandContent = CommandConfig.adbCmdLaunchAppActivity + " "
         + (stepConfig.additionalAction ?? '');
     return await CommandController.executeAdbCommand(AdbCommand.customized, extArguments: commandContent);

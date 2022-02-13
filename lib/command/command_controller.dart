@@ -44,23 +44,27 @@ class CommandController {
   // Run a script contains multi step commands.
   static Future<ExecutionResult> runScript(List<Step<ScriptConfigModel>> stepList, ScriptConfigModel scriptConfig) async {
     var commandScript = CommandScript(stepList, 0);
-    return commandScript.process(scriptConfig);
+    return commandScript.process(await checkEnv(), scriptConfig);
   }
 
   // Group control with script on multi devices.
   static Future<ExecutionResult> groupControlWithScript(List<Step<ScriptConfigModel>> stepList, ScriptConfigModel scriptConfig) async {
     var commandScript = CommandScript(stepList, 0);
-    return commandScript.process(scriptConfig);
+    return commandScript.process(await checkEnv(), scriptConfig);
   }
 
   // Check the environment of adb execution.
-  static Future<void> checkEnv({String executable = ""}) async {
-    if (FileConfig.adbPath == "") {
+  static Future<ExecutionResult> checkEnv({String executable = ""}) async {
+    if (executable.isEmpty) {
+      executable = FileConfig.adbPath;
+    }
+    if (executable == "") {
       throw CommandRunException(message: 'adb path can not be empty.');
     }
     if (!await FileUtils.isExistFile(executable)) {
       throw CommandRunException(message: 'you must set executable path to run the command');
     }
+    return ExecutionResult.from('', true, null);
   }
 
 }

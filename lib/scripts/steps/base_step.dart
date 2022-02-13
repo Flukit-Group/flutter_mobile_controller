@@ -17,19 +17,24 @@ abstract class BaseStepTask implements Step<ScriptConfigModel> {
   BaseStepTask(this.stepConfig);
 
   @override
-  Future<ExecutionResult> stepForward(ScriptConfigModel scriptConfigs, Script<ScriptConfigModel> script) async {
+  Future<ExecutionResult> stepForward(ExecutionResult previousResult, ScriptConfigModel scriptConfigs, Script<ScriptConfigModel> script) async {
     logI('Run step of $stepName' ,tag: 'BaseStepTask');
     // TODO: If not legal, should we intercept this script or continue.
     if (!await isLegal()) {
       logW('the env checks illegal !');
       return errorResult(stepConfig.toString());
     }
+    ExecutionResult result;
     if (stepConfig.shouldLoop) {
-      return await loop(scriptConfigs, stepConfig.loopDuration, stepConfig.loopLimit);
+      result =  await loop(previousResult, scriptConfigs, stepConfig.loopDuration, stepConfig.loopLimit);
     } else {
-      return await executeCmd(scriptConfigs);
+      result = await _realExecute(stepConfig, previousResult, scriptConfigs);
+      // if (stepConfig.delayTime != null) {
+      //   return await _delayedExecution(previousResult, scriptConfigs, stepConfig.delayTime);
+      // }
+      // result = await executeCmd(previousResult, scriptConfigs);
     }
-    return script.process(scriptConfigs);
+    return script.process(result, scriptConfigs);
   }
 
   // Determine whether the current environment meets the execution conditions.
@@ -38,7 +43,7 @@ abstract class BaseStepTask implements Step<ScriptConfigModel> {
   }
 
   // Children need to implement the cmd executions.
-  Future<ExecutionResult> executeCmd(ScriptConfigModel scriptConfigs);
+  Future<ExecutionResult> executeCmd(ExecutionResult previousResult, ScriptConfigModel scriptConfigs);
 
   ExecutionResult errorResult(String errorMsg) => ExecutionResult.from('', false, errorMsg);
 
@@ -46,7 +51,20 @@ abstract class BaseStepTask implements Step<ScriptConfigModel> {
     return ExecutionResult.from(stepConfig.mark, true, result);
   }
 
-  loop(scriptConfig, duration, limit) async {
+  _realExecute(stepConfig, previousResult, scriptConfig) async {
+    if (stepConfig.delayTime != null) {
+      return await _delayedExecution(previousResult, scriptConfig, stepConfig.delayTime);
+    }
+    return await executeCmd(previousResult, scriptConfig);
+  }
+
+  Future<ExecutionResult> _delayedExecution(previousResult, scriptConfig, delayTime) async {
+    return await Future.delayed(delayTime, () async {
+      return await executeCmd(previousResult, scriptConfig);
+    });
+  }
+
+  loop(ExecutionResult previousResult, scriptConfig, duration, limit) async {
     // var timer = Timer.periodic(duration, (timer) async {
     //   await _executeCmd();
     //   _runCount ++;
@@ -57,11 +75,10 @@ abstract class BaseStepTask implements Step<ScriptConfigModel> {
     //   }
     // });
     // Return until all loop tasks run finished.
-    logV('loop duration is: ${duration}');
     while ((_runCount = _runCount + 1) <= limit) {
       logI('run step execution :$stepName in looper, counter times: $_runCount');
       await Future.delayed(duration, () async {
-        return await executeCmd(scriptConfig);
+        return await _realExecute(stepConfig, previousResult, scriptConfig);
       });
     }
   }
@@ -75,7 +92,7 @@ abstract class BaseRunner extends BaseStepTask {
   RunnerConfigModel get stepConfig => runnerConfig;
 
   @override
-  Future<ExecutionResult> executeCmd(ScriptConfigModel scriptConfigs) async {
+  Future<ExecutionResult> executeCmd(ExecutionResult previousResult, ScriptConfigModel scriptConfigs) async {
     if (stepConfig is RunnerConfigModel) {
       return await CommandController.runScript(childrenSteps(), scriptConfigs);
     }
