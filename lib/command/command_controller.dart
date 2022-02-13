@@ -2,7 +2,6 @@
 import 'package:mobile_controller/config/command_config.dart';
 import 'package:mobile_controller/model/execute_result.dart';
 import 'package:mobile_controller/scripts/script_ability.dart';
-import 'package:mobile_controller/utils/log_helper.dart';
 import '../config/file_config.dart';
 import '../model/script_config_data.dart';
 import '../utils/file_utils.dart';

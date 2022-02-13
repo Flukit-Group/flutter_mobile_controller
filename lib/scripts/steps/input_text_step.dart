@@ -1,6 +1,7 @@
 
 import 'dart:math';
 
+import 'package:mobile_controller/model/execute_result.dart';
 import 'package:mobile_controller/model/script_config_data.dart';
 import 'package:mobile_controller/repository/common_repository.dart';
 import 'package:mobile_controller/scripts/steps/base_step.dart';
@@ -14,7 +15,7 @@ class InputTextStep extends BaseStepTask {
   InputTextStep(StepConfigModel stepConfig) : super(stepConfig);
 
   @override
-  Future<void> executeCmd(ScriptConfigModel scriptConfigs) async {
+  Future<ExecutionResult> executeCmd(ScriptConfigModel scriptConfigs) async {
     var commandContent = CommandConfig.adbCmdInputTextByBroadcast + " ";
     // todo: provide interceptor ability from [ScriptConfigModel]
     var msg = '';
@@ -25,7 +26,7 @@ class InputTextStep extends BaseStepTask {
       logV('comment content: $msg');
     }
     var finalCmd = commandContent + msg;
-    await CommandController.executeAdbCommand(AdbCommand.customized, extArguments: finalCmd);
+    return await CommandController.executeAdbCommand(AdbCommand.customized, extArguments: finalCmd);
   }
 
   @override

@@ -9,16 +9,12 @@ import 'package:mobile_controller/scripts/steps/input_text_step.dart';
 import 'package:mobile_controller/scripts/steps/launch_app_step.dart';
 import 'package:mobile_controller/scripts/steps/tap_step.dart';
 
+// Execution entrance of wechat scripts.
+// @author Dorck
 class WxAutoReplyRepository {
-  ScriptConfigModel scriptConfigModel = ScriptConfigModel('wechat-auto-reply', {
-    'launch_app': StepConfigModel(
-      'launch_app',
-      additionalAction: 'com.tencent.mm/.ui.LauncherUI',
-    ),
-    'tap_position': StepConfigModel(
-      'launch_app',
-      additionalAction: 'com.tencent.mm/.ui.LauncherUI',
-    ),
+  ScriptConfigModel scriptConfigModel = ScriptConfigModel('wechat-auto-reply', additionalActions: {
+    'launch_app': '',
+    'tap_position': '',
   });
 
   List<Step<ScriptConfigModel>> openLiveTabStepList = [
@@ -76,7 +72,6 @@ class WxAutoReplyRepository {
       ),
     ];
     var runnerConfig = RunnerConfigModel('text_input_sender_runner', loopRunnerSteps);
-    runnerConfig.children = loopRunnerSteps;
     runnerConfig.shouldLoop = true;
     runnerConfig.loopLimit = 5;
     runnerConfig.loopDuration = Duration(milliseconds: 5000);

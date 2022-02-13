@@ -1,10 +1,14 @@
 
 import 'dart:async';
+import 'package:mobile_controller/model/execute_result.dart';
 import 'package:mobile_controller/model/script_config_data.dart';
 import 'package:mobile_controller/scripts/steps/base_step.dart';
 import '../../command/command_controller.dart';
 import '../../config/command_config.dart';
 
+/// Mock to click on mobile's screen.
+/// @author Dorck
+/// @date 2022/02/08
 class TapStep extends BaseStepTask {
 
   TapStep(StepConfigModel stepConfig) : super(stepConfig);
@@ -12,15 +16,15 @@ class TapStep extends BaseStepTask {
   _executeCmd() async {
     var commandContent = CommandConfig.adbCmdInputTap + " "
         + (stepConfig.additionalAction ?? '');
-    await CommandController.executeAdbCommand(AdbCommand.customized, extArguments: commandContent);
+    return await CommandController.executeAdbCommand(AdbCommand.customized, extArguments: commandContent);
   }
 
   @override
   get stepName => 'tap_position';
 
   @override
-  Future<void> executeCmd(ScriptConfigModel scriptConfigs) async {
-    await _executeCmd();
+  Future<ExecutionResult> executeCmd(ScriptConfigModel scriptConfigs) async {
+    return await _executeCmd();
   }
 
 }

@@ -43,7 +43,7 @@ abstract class AdbCommandExecutor {
     var processResult = await _runCmd(args, executable: executable,
         synchronous: synchronous, runInShell: runInShell, workingDirectory: workingDirectory);
     logI('executable: $executable, arguments: $args, output: ${processResult.stdout}', tag: 'AdbCommandExecutor');
-    // Check for multi devices operation at same time.
+    // TODO: Check for multi devices operation at same time.
     if (processResult.stderr != "") {
       if (processResult.stderr
           .toString()
@@ -87,6 +87,14 @@ abstract class AdbCommandExecutor {
   /// Handle original execution result as we wanted.
   /// If method returns null, [execute] will return original data without wrapper.
   ExecutionResult? processData(ProcessResult originData);
+
+  ExecutionResult success(dynamic result) {
+    return ExecutionResult.from(fullCommand, true, result);
+  }
+
+  ExecutionResult failure(String errorMsg) {
+    return ExecutionResult.from(fullCommand, false, errorMsg);
+  }
 
   @mustCallSuper
   String commandString();

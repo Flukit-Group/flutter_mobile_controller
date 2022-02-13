@@ -9,6 +9,7 @@ import 'package:mobile_controller/utils/log_helper.dart';
 /// @author Dorck
 /// @date 2022/02/10
 /// TODO: Handle if middle step execute failed.
+/// TODO: Leave current step output result as next step's input.
 class CommandScript implements Script<ScriptConfigModel> {
 
   CommandScript(this.steps, this.stepIndex);
@@ -28,7 +29,7 @@ class CommandScript implements Script<ScriptConfigModel> {
       curIndex ++;
     }
     if (curStep != null) {
-      return await curStep.run(configs, CommandScript(steps, curIndex + 1));
+      return await curStep.stepForward(configs, CommandScript(steps, curIndex + 1));
     }
     var msg = 'can not find available steps to execute.';
     logD(msg, tag: 'CommandScript');
@@ -38,7 +39,7 @@ class CommandScript implements Script<ScriptConfigModel> {
 }
 
 abstract class Step<T> {
-  Future<ExecutionResult> run(T scriptConfigs, Script<T> script);
+  Future<ExecutionResult> stepForward(T scriptConfigs, Script<T> script);
 
   get stepName;
 }

@@ -5,9 +5,10 @@
 class ScriptConfigModel {
   String name;
   String? description;
-  Map<String, StepConfigModel> stepConfigs;
+  // TODO: The additional execution parameters of the same command appearing in the script may be different.
+  Map<String, String>? additionalActions;
 
-  ScriptConfigModel(this.name, this.stepConfigs, {this.description});
+  ScriptConfigModel(this.name, {this.additionalActions, this.description});
 }
 
 // Config model of each step executions.
@@ -45,6 +46,20 @@ class StepConfigModel {
 /// Note: The configs in children will not take effect if outer [RunnerConfigModel] has already set.
 class RunnerConfigModel extends StepConfigModel {
   List<StepConfigModel>? children;
-  RunnerConfigModel(String mark, this.children) : super(mark);
+  RunnerConfigModel(String mark, this.children, {
+    String? actions,
+    int? timeout,
+    bool needLoop = false,
+    Duration loopDuration = const Duration(milliseconds: 3000),
+    int loopLimit = -1,
+    int? priority,
+  }) : super(mark,
+    additionalAction: actions,
+    timeout: timeout,
+    shouldLoop: needLoop,
+    loopDuration: loopDuration,
+    loopLimit: loopLimit,
+    priority: priority,
+  );
 
 }

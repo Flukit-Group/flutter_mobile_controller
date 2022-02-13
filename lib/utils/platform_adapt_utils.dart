@@ -8,6 +8,8 @@ import 'package:mobile_controller/utils/log_helper.dart';
 /// @author dorck
 /// @date 2022/02/07
 class PlatformAdaptUtils {
+  PlatformAdaptUtils._();
+
   static String getLineBreak() {
     if (Platform.isWindows) {
       return "\r\n";
