@@ -1,9 +1,12 @@
+import 'package:adwaita/adwaita.dart';
 import 'package:bitsdojo_window/bitsdojo_window.dart';
 import 'package:fluent_ui/fluent_ui.dart';
 import 'package:flutter/foundation.dart';
+import 'package:flutter/material.dart' as material;
 import 'package:mobile_controller/config/common_config.dart';
 import 'package:mobile_controller/config/constants.dart';
 import 'package:mobile_controller/pages/home_page.dart';
+import 'package:mobile_controller/pages/my_home_page.dart';
 import 'package:mobile_controller/style/theme.dart';
 import 'package:mobile_controller/utils/initializer_helper.dart';
 import 'package:provider/provider.dart';
@@ -27,7 +30,7 @@ void main() async {
   CommonConfig.initAppVersion();
   await InitializerHelper.init(CommonConfig.configs);
   Future.delayed(const Duration(milliseconds: 100), () {
-    runApp(const MyApp());
+    runApp(MyNewApp());
   });
 
   if (isDesktop) {
@@ -73,6 +76,29 @@ class MyApp extends StatelessWidget {
               glowFactor: is10footScreen() ? 2.0 : 0.0,
             ),
           ),
+        );
+      },
+    );
+  }
+}
+
+class MyNewApp extends StatelessWidget {
+  MyNewApp({Key? key}) : super(key: key);
+
+  final ValueNotifier<ThemeMode> themeNotifier =
+  ValueNotifier(ThemeMode.system);
+
+  @override
+  Widget build(BuildContext context) {
+    return ValueListenableBuilder<ThemeMode>(
+      valueListenable: themeNotifier,
+      builder: (_, ThemeMode currentMode, __) {
+        return material.MaterialApp(
+          theme: AdwaitaThemeData.light(),
+          darkTheme: AdwaitaThemeData.dark(),
+          debugShowCheckedModeBanner: false,
+          home: HomePage(themeNotifier: themeNotifier),
+          themeMode: currentMode,
         );
       },
     );

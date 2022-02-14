@@ -9,7 +9,7 @@ import 'package:mobile_controller/utils/log_helper.dart';
 /// @author Dorck
 /// @date 2022/02/10
 /// TODO: Handle if middle step execute failed.
-/// TODO: Leave current step output result as next step's input.
+/// TODO: Use config models of step as param instead of [Step].
 class CommandScript implements Script<ScriptConfigModel> {
 
   CommandScript(this.steps, this.stepIndex);

@@ -1,336 +1,190 @@
 
+import 'package:flutter/material.dart';
+import 'package:libadwaita/libadwaita.dart';
+import 'package:libadwaita_bitsdojo/libadwaita_bitsdojo.dart';
+import 'package:url_launcher/url_launcher.dart';
 
-import 'package:bitsdojo_window/bitsdojo_window.dart';
-import 'package:fluent_ui/fluent_ui.dart';
-import 'package:flutter/foundation.dart';
-import 'package:flutter/material.dart' as material;
-import 'package:mobile_controller/config/command_config.dart';
-import 'package:mobile_controller/config/constants.dart';
-import 'package:mobile_controller/model/device_result.dart';
-import 'package:mobile_controller/pages/recommend_scripts_page.dart';
-import 'package:mobile_controller/pages/setting_page.dart';
-import 'package:mobile_controller/style/theme.dart';
-import 'package:mobile_controller/utils/log_helper.dart';
-import 'package:provider/src/provider.dart';
-import 'package:url_launcher/link.dart';
-import 'package:mobile_controller/command/command_controller.dart';
+class HomePage extends StatefulWidget {
+  const HomePage({Key? key, required this.themeNotifier}) : super(key: key);
 
-import 'mobile_connections_page.dart';
-
-class MyHomePage extends StatefulWidget {
-  const MyHomePage({Key? key}) : super(key: key);
+  final ValueNotifier<ThemeMode> themeNotifier;
 
   @override
-  _MyHomePageState createState() => _MyHomePageState();
+  State<HomePage> createState() => _HomePageState();
 }
 
-class _MyHomePageState extends State<MyHomePage> {
-  bool value = false;
+class _HomePageState extends State<HomePage> {
+  ValueNotifier<int> counter = ValueNotifier(0);
+  int? _currentIndex = 0;
 
-  int index = 0;
-
-  final settingsController = ScrollController();
-  final flyoutController = FlyoutController();
-  List<DeviceResult> _connectedDevList = [];
+  late ScrollController listController;
+  late ScrollController settingsController;
+  late FlapController _flapController;
 
   @override
   void initState() {
-    _refreshDevList();
     super.initState();
-  }
+    listController = ScrollController();
+    settingsController = ScrollController();
+    _flapController = FlapController();
 
-  _refreshDevList() {
-    CommandController.executeAdbCommand(AdbCommand.deviceList).then((value) {
-      logV('execute cmd result: adb devices >> $value');
-      if (value.succeed) {
-        setState(() {
-          _connectedDevList = value.result;
-        });
-      }
-    }).catchError((e) {
-      logE('catch error: ' + e.toString());
-    });
+    _flapController.addListener(() => setState(() {}));
   }
 
   @override
   void dispose() {
+    listController.dispose();
     settingsController.dispose();
-    flyoutController.dispose();
     super.dispose();
   }
 
+  void changeTheme() =>
+      widget.themeNotifier.value = widget.themeNotifier.value == ThemeMode.light
+          ? ThemeMode.dark
+          : ThemeMode.light;
+
   @override
   Widget build(BuildContext context) {
-    final appTheme = context.watch<AppTheme>();
-    final noDeviceButton = Button(
-        child: Text('无设备连接'),
-        onPressed: () {
-          _refreshDevList();
-        }
-    );
-    final List<DropDownButtonItem> dropItems = List.generate(_connectedDevList.length, (index) => DropDownButtonItem(
-      title: Text(_connectedDevList[index].devName!, softWrap: true,),
-      leading: Container(
-        width: 6,
-        height: 6,
-        decoration: BoxDecoration(
-            borderRadius: BorderRadius.circular(6),
-            color: _connectedDevList[index].online ? Colors.green : Colors.red
-        ),
-      ),
-      onTap: () {},
-    ));
-    return NavigationView(
-      appBar: NavigationAppBar(
-        height: 64,
-        automaticallyImplyLeading: false,
-        // height: !kIsWeb ? appWindow.titleBarHeight : 31.0,
-        title: () {
-          if (kIsWeb) return const Text(Constants.windowTitle);
-          return Padding(
-            padding: EdgeInsets.only(top: appWindow.titleBarHeight),
-            child: MoveWindow(
-              child: Row(
-                mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                children: [
-                  Padding(
-                    padding: EdgeInsets.only(left: 28.0),
-                    child: Text(Constants.windowTitle, style: TextStyle(
-                      fontSize: 20,
-                      fontWeight: FontWeight.bold
-                    ),),
-                  ),
-                  Row(
-                    children: [
-                      Tooltip(
-                        message: 'Connected Devices',
-                        child: dropItems.isEmpty ? noDeviceButton : DropDownButton(
-                          controller: flyoutController,
-                          contentWidth: 180,
-                          leading: const Icon(FluentIcons.cell_phone),
-                          title: Text(_connectedDevList.isEmpty ? '无设备连接' : _connectedDevList[0].devName!, style: FluentTheme.of(context).typography.body,),
-                          items: dropItems,
-                        ),
-                      ),
-                      Padding(
-                        padding: EdgeInsets.only(right: 10.0, left: 10),
-                        child: Tooltip(
-                          message: 'Refresh devices',
-                          child: IconButton(
-                            onPressed: () {
+    final developers = {
+      'Prateek Sunal': 'prateekmedia',
+      'Malcolm Mielle': 'MalcolmMielle',
+      'sim': 'simrat39',
+      'Jesús Rodríguez': 'jesusrp98',
+      'Polo': 'pablojimpas',
+    };
 
-                            },
-                            icon: Icon(FluentIcons.refresh, size: 16),
-                            style: ButtonStyle(
-                              border: ButtonState.all(
-                                BorderSide(
-                                  color: FluentTheme.of(context).typography.title?.color?.withOpacity(0.2) ?? Colors.black.withOpacity(0.12),
-                                  width: 0.6
-                                )
-                              ),
+    return AdwScaffold(
+      flapController: _flapController,
+      headerbar: (_) => AdwHeaderBar.bitsdojo(
+        appWindow: appWindow,
+        start: [
+          AdwHeaderButton(
+            icon: const Icon(Icons.view_sidebar_outlined, size: 19),
+            isActive: _flapController.isOpen,
+            onPressed: () => _flapController.toggle(),
+          ),
+          AdwHeaderButton(
+            icon: const Icon(Icons.nightlight_round, size: 15),
+            onPressed: changeTheme,
+          ),
+        ],
+        title: const Text('Libadwaita Demo'),
+        end: [
+          AdwPopupMenu(
+            body: Column(
+              mainAxisSize: MainAxisSize.min,
+              crossAxisAlignment: CrossAxisAlignment.stretch,
+              children: [
+                AdwButton.flat(
+                  onPressed: () {
+                    counter.value = 0;
+                    Navigator.of(context).pop();
+                  },
+                  padding: AdwButton.defaultButtonPadding.copyWith(
+                    top: 10,
+                    bottom: 10,
+                  ),
+                  child: const Text(
+                    'Reset Counter',
+                    style: TextStyle(fontSize: 15),
+                  ),
+                ),
+                const Divider(),
+                AdwButton.flat(
+                  padding: AdwButton.defaultButtonPadding.copyWith(
+                    top: 10,
+                    bottom: 10,
+                  ),
+                  child: const Text(
+                    'Preferences',
+                    style: TextStyle(fontSize: 15),
+                  ),
+                ),
+                AdwButton.flat(
+                  padding: AdwButton.defaultButtonPadding.copyWith(
+                    top: 10,
+                    bottom: 10,
+                  ),
+                  onPressed: () => showDialog<Widget>(
+                    context: context,
+                    builder: (ctx) => AdwAboutWindow(
+                      issueTrackerLink:
+                      'https://github.com/gtk-flutter/libadwaita/issues',
+                      appIcon: Image.asset('assets/logo.png'),
+                      credits: [
+                        AdwPreferencesGroup.credits(
+                          title: 'Developers',
+                          children: developers.entries
+                              .map(
+                                (e) => AdwActionRow(
+                              title: e.key,
+                              onActivated: () =>
+                                  launch('https://github.com/${e.value}'),
                             ),
-                          ),
-                        )
+                          )
+                              .toList(),
+                        ),
+                      ],
+                      copyright: 'Copyright 2021-2022 Gtk-Flutter Developers',
+                      license: const Text(
+                        'GNU LGPL-3.0, This program comes with no warranty.',
                       ),
-                    ],
+                    ),
                   ),
-                ],
-              ),
-            ),
-          );
-        }(),
-        actions: kIsWeb
-            ? null
-            : MoveWindow(
-              child: Row(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: const [Spacer(), WindowButtons()],
-          ),
-        ),
-      ),
-      pane: NavigationPane(
-        selected: index,
-        onChanged: (i) => setState(() => index = i),
-        size: const NavigationPaneSize(
-          openMinWidth: 180,
-          openMaxWidth: 320,
-        ),
-        header: Container(
-          height: kOneLineTileHeight,
-          padding: const EdgeInsets.symmetric(horizontal: 10.0),
-          child: const FlutterLogo(
-            style: FlutterLogoStyle.horizontal,
-            size: 100,
-          ),
-        ),
-        displayMode: appTheme.displayMode,
-        indicatorBuilder: () {
-          switch (appTheme.indicator) {
-            case NavigationIndicators.end:
-              return NavigationIndicator.end;
-            case NavigationIndicators.sticky:
-            default:
-              return NavigationIndicator.sticky;
-          }
-        }(),
-        items: [
-          // It doesn't look good when resizing from compact to open
-          // PaneItemHeader(header: Text('User Interaction')),
-          PaneItemSeparator(),
-          PaneItem(
-            icon: const Icon(FluentIcons.connect_virtual_machine),
-            title: const Text('Dashboard'),
-          ),
-          PaneItem(
-            icon: const Icon(FluentIcons.mobile_angled),
-            title: const Text('Mobile Control'),
-          ),
-          PaneItem(
-            icon: const Icon(FluentIcons.network_tower),
-            title: const Text('Wifi Connection'),
-          ),
-          PaneItemSeparator(),
-          PaneItem(
-            icon: const Icon(FluentIcons.cost_control),
-            title: const Text('Sample Scripts'),
-          ),
-          _LinkPaneItemAction(
-            icon: const Icon(FluentIcons.bug),
-            title: const Text('Report a Bug'),
-            link: 'https://github.com/Moosphan/flutter_mobile_controller/issues/new'
-          ),
-          PaneItem(
-            icon: Icon(
-              appTheme.displayMode == PaneDisplayMode.top
-                  ? FluentIcons.more
-                  : FluentIcons.more_vertical,
-            ),
-            title: const Text('Others'),
-            infoBadge: const InfoBadge(
-              source: Text('9'),
+                  child: const Text(
+                    'About this Demo',
+                    style: TextStyle(fontSize: 15),
+                  ),
+                ),
+              ],
             ),
           ),
         ],
-        // autoSuggestBox: AutoSuggestBox(
-        //   controller: TextEditingController(),
-        //   items: const ['Item 1', 'Item 2', 'Item 3', 'Item 4'],
-        // ),
-        // autoSuggestBoxReplacement: const Icon(FluentIcons.search),
-        footerItems: [
-          PaneItemSeparator(),
-          PaneItem(
-            icon: const Icon(FluentIcons.settings),
-            title: const Text('Settings'),
+      ),
+      flap: (isDrawer) => AdwSidebar(
+        currentIndex: _currentIndex,
+        isDrawer: isDrawer,
+        children: const [
+          AdwSidebarItem(
+            label: 'Welcome',
           ),
-          _LinkPaneItemAction(
-            icon: const Icon(FluentIcons.alert_solid),
-            title: const Text('Source code'),
-            link: 'https://github.com/Moosphan/flutter_mobile_controller',
+          AdwSidebarItem(
+            label: 'Counter',
           ),
+          AdwSidebarItem(
+            label: 'Lists',
+          ),
+          AdwSidebarItem(
+            label: 'Avatar',
+          ),
+          AdwSidebarItem(
+            label: 'Flap',
+          ),
+          AdwSidebarItem(
+            label: 'View Switcher',
+          ),
+          AdwSidebarItem(
+            label: 'Settings',
+          ),
+          AdwSidebarItem(
+            label: 'Style Classes',
+          )
         ],
+        onSelected: (index) => setState(() => _currentIndex = index),
       ),
-      content: NavigationBody(index: index, children: [
-        const MobileConnectionPage(),
-        const Placeholder(),
-        const Placeholder(),
-        const RecommendScriptsPage(),
-        const Placeholder(),
-        const Placeholder(),
-        const SettingsPage(),
-      ]),
-    );
-  }
-}
-
-class WindowButtons extends StatelessWidget {
-  const WindowButtons({Key? key}) : super(key: key);
-
-  @override
-  Widget build(BuildContext context) {
-    assert(debugCheckHasFluentTheme(context));
-    assert(debugCheckHasFluentLocalizations(context));
-    final ThemeData theme = FluentTheme.of(context);
-    final buttonColors = WindowButtonColors(
-      iconNormal: theme.inactiveColor,
-      iconMouseDown: theme.inactiveColor,
-      iconMouseOver: theme.inactiveColor,
-      mouseOver: ButtonThemeData.buttonColor(
-          theme.brightness, {ButtonStates.hovering}),
-      mouseDown: ButtonThemeData.buttonColor(
-          theme.brightness, {ButtonStates.pressing}),
-    );
-    final closeButtonColors = WindowButtonColors(
-      mouseOver: Colors.red,
-      mouseDown: Colors.red.dark,
-      iconNormal: theme.inactiveColor,
-      iconMouseOver: Colors.red.basedOnLuminance(),
-      iconMouseDown: Colors.red.dark.basedOnLuminance(),
-    );
-    return Row(children: [
-      Tooltip(
-        message: FluentLocalizations.of(context).minimizeWindowTooltip,
-        child: MinimizeWindowButton(colors: buttonColors),
-      ),
-      Tooltip(
-        message: FluentLocalizations.of(context).restoreWindowTooltip,
-        child: WindowButton(
-          colors: buttonColors,
-          iconBuilder: (context) {
-            if (appWindow.isMaximized) {
-              return RestoreIcon(color: context.iconColor);
-            }
-            return MaximizeIcon(color: context.iconColor);
-          },
-          onPressed: () {
-            logI('max or min window');
-            appWindow.maximizeOrRestore;
-          },
-        ),
-      ),
-      Tooltip(
-        message: FluentLocalizations.of(context).closeWindowTooltip,
-        child: CloseWindowButton(colors: closeButtonColors),
-      ),
-    ]);
-  }
-}
-
-class _LinkPaneItemAction extends PaneItem {
-  _LinkPaneItemAction({
-    required Widget icon,
-    required this.link,
-    title,
-    infoBadge,
-    focusNode,
-    autofocus = false,
-  }) : super(
-    icon: icon,
-    title: title,
-    infoBadge: infoBadge,
-    focusNode: focusNode,
-    autofocus: autofocus,
-  );
-
-  final String link;
-
-  @override
-  Widget build(
-      BuildContext context,
-      bool selected,
-      VoidCallback? onPressed, {
-        PaneDisplayMode? displayMode,
-        bool showTextOnTop = true,
-        bool? autofocus,
-      }) {
-    return Link(
-      uri: Uri.parse(link),
-      builder: (context, followLink) => super.build(
-        context,
-        selected,
-        followLink,
-        displayMode: displayMode,
-        showTextOnTop: showTextOnTop,
-        autofocus: autofocus,
+      body: AdwViewStack(
+        animationDuration: const Duration(milliseconds: 100),
+        index: _currentIndex,
+        children: const [
+          Placeholder(),
+          Placeholder(),
+          Placeholder(),
+          Placeholder(),
+          Placeholder(),
+          Placeholder(),
+          Placeholder(),
+          Placeholder(),
+        ],
       ),
     );
   }
