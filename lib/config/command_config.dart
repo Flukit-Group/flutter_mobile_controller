@@ -34,6 +34,8 @@ class CommandConfig {
   static const adbCmdLaunchAppActivity = 'shell am start';
   // 模拟点击操作 e.g., `adb shell input tap 100 100`
   static const adbCmdInputTap = 'shell input tap';
+  // 模拟滑动操作 e.g., `adb shell input swipe x1 y1 x2 y2`
+  static const adbCmdInputSwipe = 'shell input swipe';
   // 模拟文本输入 (问题：无法输入中文)
   static const adbCmdInputText = 'shell input text';
   // 模拟键盘按键触发
