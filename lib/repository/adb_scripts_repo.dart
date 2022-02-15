@@ -35,7 +35,7 @@ class AdbScriptsRepository {
 
   // Auto unlock the screen.
   static Future<ExecutionResult> runAutoUnlockScreen() async {
-    var runnerConfig = RunnerConfigModel('wifi_connection_runner', TemporaryScriptDataSource.generateAutoUnlockStepConfigs());
+    var runnerConfig = RunnerConfigModel('auto_unlock_screen', TemporaryScriptDataSource.generateAutoUnlockStepConfigs());
     List<Step<ScriptConfigModel>> stepList = [ScreenAutoUnlockRunner(runnerConfig)];
     return await CommandController.runScript(stepList,
         ScriptConfigModel('auto_unlock_screen_script', additionalActions: {}));

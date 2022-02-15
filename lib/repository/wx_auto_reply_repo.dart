@@ -5,7 +5,7 @@ import 'package:mobile_controller/model/script_config_data.dart';
 import 'package:mobile_controller/scripts/runners/text_sender_runner.dart';
 import 'package:mobile_controller/scripts/script_ability.dart';
 import 'package:mobile_controller/scripts/steps/do_nothing_step.dart';
-import 'package:mobile_controller/scripts/steps/input_text_step.dart';
+import 'package:mobile_controller/scripts/steps/input_zh_text_step.dart';
 import 'package:mobile_controller/scripts/steps/launch_app_step.dart';
 import 'package:mobile_controller/scripts/steps/tap_step.dart';
 
@@ -62,7 +62,7 @@ class WxAutoReplyRepository {
       ),
       // set input text
       StepConfigModel(
-          'text_input',
+          'text_input_zh',
           additionalAction: 'random',
       ),
       // click send button
@@ -88,7 +88,7 @@ class WxAutoReplyRepository {
       if (configModel.mark == 'tap_position') {
         return TapStep(configModel);
       } else if (configModel.mark == 'text_input') {
-        return InputTextStep(configModel);
+        return InputChineseTextStep(configModel);
       } else if (configModel.mark == 'launch_app') {
         return LaunchAppStep(configModel);
       }

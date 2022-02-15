@@ -21,6 +21,7 @@ class StepConfigModel {
   bool shouldLoop;
   Duration loopDuration;
   int loopLimit;
+  Map<String, dynamic>? ext;
   StepConfigModel? next;
 
   StepConfigModel(this.mark, {this.additionalAction,
@@ -31,6 +32,7 @@ class StepConfigModel {
     this.loopDuration = const Duration(milliseconds: 6000),
     this.loopLimit = -1,
     this.next,
+    this.ext,
   });
 
   @override

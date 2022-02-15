@@ -30,7 +30,7 @@ void main() async {
   CommonConfig.initAppVersion();
   await InitializerHelper.init(CommonConfig.configs);
   Future.delayed(const Duration(milliseconds: 100), () {
-    runApp(MyNewApp());
+    runApp(MyApp());
   });
 
   if (isDesktop) {

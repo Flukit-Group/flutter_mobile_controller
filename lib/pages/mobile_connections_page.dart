@@ -152,7 +152,17 @@ class _MobileConnectionPageState extends State<MobileConnectionPage> {
                       },
                     ),
                     SizedBox(height: 20,),
-                    Text('setting 6'),
+                    Button(
+                      child: Text('手机屏幕自动解锁'),
+                      onPressed: () {
+                        AdbScriptsRepository.runAutoUnlockScreen().then((value) {
+                          logV('execute script result: $value');
+                          setState(() {
+                            _executionResult = 'Result >> ' + value.toString();
+                          });
+                        });
+                      },
+                    ),
                     SizedBox(height: 20,),
                   ],
                 ),
