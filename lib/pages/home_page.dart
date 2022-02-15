@@ -2,7 +2,14 @@
 import 'package:flutter/material.dart';
 import 'package:libadwaita/libadwaita.dart';
 import 'package:libadwaita_bitsdojo/libadwaita_bitsdojo.dart';
+import 'package:mobile_controller/config/constants.dart';
+import 'package:provider/provider.dart';
 import 'package:url_launcher/url_launcher.dart';
+
+import '../command/command_controller.dart';
+import '../config/command_config.dart';
+import '../model/device_result.dart';
+import '../utils/log_helper.dart';
 
 class HomePage extends StatefulWidget {
   const HomePage({Key? key, required this.themeNotifier}) : super(key: key);
@@ -14,16 +21,30 @@ class HomePage extends StatefulWidget {
 }
 
 class _HomePageState extends State<HomePage> {
-  ValueNotifier<int> counter = ValueNotifier(0);
   int? _currentIndex = 0;
 
   late ScrollController listController;
   late ScrollController settingsController;
   late FlapController _flapController;
+  List<DeviceResult> _connectedDevList = [];
+
+  _refreshDevList() {
+    CommandController.executeAdbCommand(AdbCommand.deviceList).then((value) {
+      logV('execute cmd result: adb devices >> $value');
+      if (value.succeed) {
+        setState(() {
+          _connectedDevList = value.result;
+        });
+      }
+    }).catchError((e) {
+      logE('catch error: ' + e.toString());
+    });
+  }
 
   @override
   void initState() {
     super.initState();
+    _refreshDevList();
     listController = ScrollController();
     settingsController = ScrollController();
     _flapController = FlapController();
@@ -53,6 +74,30 @@ class _HomePageState extends State<HomePage> {
       'Polo': 'pablojimpas',
     };
 
+    final noDeviceButton = AdwButton.flat(
+        child: Text('无设备连接'),
+        onPressed: () {
+          _refreshDevList();
+        }
+    );
+
+    final List<DropdownMenuItem> dropItems = List.generate(_connectedDevList.length, (index) => DropdownMenuItem<String>(
+      child: Row(
+        children: [
+          Container(
+            width: 6,
+            height: 6,
+            decoration: BoxDecoration(
+                borderRadius: BorderRadius.circular(6),
+                color: _connectedDevList[index].online ? Colors.green : Colors.red
+            ),
+          ),
+          Text(_connectedDevList[index].devName!, softWrap: true,),
+        ],
+      ),
+      onTap: () {},
+    ));
+
     return AdwScaffold(
       flapController: _flapController,
       headerbar: (_) => AdwHeaderBar.bitsdojo(
@@ -68,8 +113,34 @@ class _HomePageState extends State<HomePage> {
             onPressed: changeTheme,
           ),
         ],
-        title: const Text('Libadwaita Demo'),
+        title: const Text(Constants.windowTitle),
         end: [
+          Row(
+            children: [
+              Tooltip(
+                message: 'Connected Devices',
+                child: dropItems.isEmpty ? noDeviceButton : AdwComboButton(
+                  choices: _connectedDevList.isEmpty ? ['无设备连接'] : _connectedDevList.map((dev) => dev.devName!).toList(),
+                  selectedIndex: 0,
+                  onSelected: (index) {
+
+                  },
+                ),
+              ),
+              Padding(
+                  padding: EdgeInsets.only(right: 10.0, left: 10),
+                  child: Tooltip(
+                    message: 'Refresh devices',
+                    child: IconButton(
+                      onPressed: () {
+
+                      },
+                      icon: Icon(Icons.refresh_rounded, size: 22),
+                    ),
+                  )
+              ),
+            ],
+          ),
           AdwPopupMenu(
             body: Column(
               mainAxisSize: MainAxisSize.min,
@@ -77,7 +148,6 @@ class _HomePageState extends State<HomePage> {
               children: [
                 AdwButton.flat(
                   onPressed: () {
-                    counter.value = 0;
                     Navigator.of(context).pop();
                   },
                   padding: AdwButton.defaultButtonPadding.copyWith(

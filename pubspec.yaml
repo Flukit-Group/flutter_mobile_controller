@@ -40,8 +40,8 @@ dependencies:
   # Provides an API for querying information about an application package.
   package_info_plus: ^1.3.0
   # Implements Microsoft's Fluent Design System in Flutter.
-  fluent_ui:
-    git: https://github.com/bdlukaa/fluent_ui.git
+  #fluent_ui:
+  #  git: https://github.com/bdlukaa/fluent_ui.git
   # A package to help with creating custom windows with Flutter desktop.
   bitsdojo_window: ^0.1.1+1
   # Opening and saving files, or selecting directories, using native file selection UI.
@@ -53,7 +53,7 @@ dependencies:
   logger: ^1.1.0
   # Provides most of the window decorations from linux themes.
   window_decorations: ^2.0.0+2
-  # Libadwaita's widgets for Flutter. Following Gnome HIG and available on all platforms.
+  # Libadwaita's theme & widgets for Flutter. Following Gnome HIG and available on all platforms.
   libadwaita: ^1.0.0+1
   adwaita: ^0.5.1
   libadwaita_bitsdojo: ^0.5.0

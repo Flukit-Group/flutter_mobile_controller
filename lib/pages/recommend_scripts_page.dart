@@ -1,5 +1,7 @@
 
-import 'package:fluent_ui/fluent_ui.dart';
+
+import 'package:flutter/material.dart';
+import 'package:libadwaita/libadwaita.dart';
 
 class RecommendScriptsPage extends StatefulWidget {
   const RecommendScriptsPage({Key? key}) : super(key: key);
@@ -11,8 +13,8 @@ class RecommendScriptsPage extends StatefulWidget {
 class _RecommendScriptsPageState extends State<RecommendScriptsPage> {
   @override
   Widget build(BuildContext context) {
-    return ScaffoldPage(
-      content: GridView.count(
+    return Scaffold(
+      body: GridView.count(
         crossAxisCount: 4,
         padding: EdgeInsets.all(12),
         crossAxisSpacing: 20,
@@ -30,7 +32,7 @@ class _RecommendScriptsPageState extends State<RecommendScriptsPage> {
     );
   }
 
-  _buildItem() => Button(
+  _buildItem() => AdwButton.flat(
     child: Container(
       decoration: BoxDecoration(
         color: Colors.black.withOpacity(0.16),
@@ -40,16 +42,11 @@ class _RecommendScriptsPageState extends State<RecommendScriptsPage> {
       padding: EdgeInsets.all(20),
       child: Column(
         children: [
-          Icon(FluentIcons.care_activity, size: 36, color: Colors.black,),
+          Icon(Icons.deck_sharp, size: 36, color: Colors.black,),
           SizedBox(height: 18,),
-          Text('微信直播自动评论脚本', style: FluentTheme.of(context).typography.body?.copyWith(color: Colors.black),)
+          Text('微信直播自动评论脚本', style: Theme.of(context).textTheme.headline6?.copyWith(color: Colors.black),)
         ],
       ),
-    ),
-    style: ButtonStyle(
-        border: null,
-      shape: null,
-      padding: ButtonState.all(EdgeInsets.zero)
     ),
     onPressed: () {
 

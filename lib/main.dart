@@ -1,15 +1,11 @@
 import 'package:adwaita/adwaita.dart';
 import 'package:bitsdojo_window/bitsdojo_window.dart';
-import 'package:fluent_ui/fluent_ui.dart';
 import 'package:flutter/foundation.dart';
-import 'package:flutter/material.dart' as material;
+import 'package:flutter/material.dart';
 import 'package:mobile_controller/config/common_config.dart';
 import 'package:mobile_controller/config/constants.dart';
 import 'package:mobile_controller/pages/home_page.dart';
-import 'package:mobile_controller/pages/my_home_page.dart';
-import 'package:mobile_controller/style/theme.dart';
 import 'package:mobile_controller/utils/initializer_helper.dart';
-import 'package:provider/provider.dart';
 
 /// Launcher of application.
 /// @author dorck
@@ -47,43 +43,7 @@ void main() async {
 
 
 class MyApp extends StatelessWidget {
-  const MyApp({Key? key}) : super(key: key);
-
-  // This widget is the root of your application.
-  @override
-  Widget build(BuildContext context) {
-    return ChangeNotifierProvider(
-      create: (_) => AppTheme(),
-      builder: (context, _) {
-        final appTheme = context.watch<AppTheme>();
-        return FluentApp(
-          title: Constants.windowTitle,
-          themeMode: appTheme.mode,
-          debugShowCheckedModeBanner: false,
-          initialRoute: '/',
-          routes: {'/': (_) => const MyHomePage()},
-          theme: ThemeData(
-            accentColor: appTheme.color,
-            brightness: appTheme.mode == ThemeMode.system
-                ? darkMode
-                ? Brightness.dark
-                : Brightness.light
-                : appTheme.mode == ThemeMode.dark
-                ? Brightness.dark
-                : Brightness.light,
-            visualDensity: VisualDensity.standard,
-            focusTheme: FocusThemeData(
-              glowFactor: is10footScreen() ? 2.0 : 0.0,
-            ),
-          ),
-        );
-      },
-    );
-  }
-}
-
-class MyNewApp extends StatelessWidget {
-  MyNewApp({Key? key}) : super(key: key);
+  MyApp({Key? key}) : super(key: key);
 
   final ValueNotifier<ThemeMode> themeNotifier =
   ValueNotifier(ThemeMode.system);
@@ -93,7 +53,7 @@ class MyNewApp extends StatelessWidget {
     return ValueListenableBuilder<ThemeMode>(
       valueListenable: themeNotifier,
       builder: (_, ThemeMode currentMode, __) {
-        return material.MaterialApp(
+        return MaterialApp(
           theme: AdwaitaThemeData.light(),
           darkTheme: AdwaitaThemeData.dark(),
           debugShowCheckedModeBanner: false,

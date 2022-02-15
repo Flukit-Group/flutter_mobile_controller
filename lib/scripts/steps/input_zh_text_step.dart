@@ -9,6 +9,9 @@ import 'package:mobile_controller/utils/log_helper.dart';
 import '../../command/command_controller.dart';
 import '../../config/command_config.dart';
 
+/// Step execution to mock input text and support chinese language.
+/// @author Dorck
+/// @date 2022/02/15
 class InputChineseTextStep extends BaseStepTask {
   static const String adbKeyBoardPackage = 'com.android.adbkeyboard';
 
