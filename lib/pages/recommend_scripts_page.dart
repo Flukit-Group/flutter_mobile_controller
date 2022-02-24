@@ -1,7 +1,6 @@
 
 
 import 'package:flutter/material.dart';
-import 'package:libadwaita/libadwaita.dart';
 
 class RecommendScriptsPage extends StatefulWidget {
   const RecommendScriptsPage({Key? key}) : super(key: key);
@@ -32,7 +31,7 @@ class _RecommendScriptsPageState extends State<RecommendScriptsPage> {
     );
   }
 
-  _buildItem() => AdwButton.flat(
+  _buildItem() => TextButton(
     child: Container(
       decoration: BoxDecoration(
         color: Colors.black.withOpacity(0.16),

@@ -42,8 +42,6 @@ dependencies:
   # Implements Microsoft's Fluent Design System in Flutter.
   #fluent_ui:
   #  git: https://github.com/bdlukaa/fluent_ui.git
-  # A package to help with creating custom windows with Flutter desktop.
-  bitsdojo_window: ^0.1.1+1
   # Opening and saving files, or selecting directories, using native file selection UI.
   file_selector: ^0.8.2
   file_selector_windows: ^0.0.2
@@ -51,12 +49,9 @@ dependencies:
   file_selector_linux: ^0.0.2
   # Small, easy to use and extensible logger which prints beautiful logs.
   logger: ^1.1.0
-  # Provides most of the window decorations from linux themes.
-  window_decorations: ^2.0.0+2
-  # Libadwaita's theme & widgets for Flutter. Following Gnome HIG and available on all platforms.
-  libadwaita: ^1.0.0+1
-  adwaita: ^0.5.1
-  libadwaita_bitsdojo: ^0.5.0
+
+  # Microsoft styled icons.
+  fluentui_system_icons: ^1.1.160
 
   # The following adds the Cupertino Icons font to your application.
   # Use with the CupertinoIcons class for iOS style icons.

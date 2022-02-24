@@ -1,6 +1,5 @@
 
 import 'package:flutter/material.dart';
-import 'package:libadwaita/libadwaita.dart';
 import 'package:mobile_controller/command/command_controller.dart';
 import 'package:mobile_controller/config/command_config.dart';
 import 'package:mobile_controller/repository/adb_scripts_repo.dart';
@@ -46,7 +45,7 @@ class _MobileConnectionPageState extends State<MobileConnectionPage> {
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
-                    AdwButton.flat(
+                    TextButton(
                       child: Text('刷新设备'),
                       onPressed: () {
                         CommandController.executeAdbCommand(AdbCommand.deviceList).then((value) {
@@ -72,7 +71,7 @@ class _MobileConnectionPageState extends State<MobileConnectionPage> {
                       },
                     ),
                     SizedBox(height: 20,),
-                    AdwButton.flat(
+                    TextButton(
                       child: Text('微信自动打开首条直播间脚本测试'),
                       onPressed: () {
                         WxAutoReplyRepository().openLiveEntrance().then((value) {
@@ -90,7 +89,7 @@ class _MobileConnectionPageState extends State<MobileConnectionPage> {
                       },
                     ),
                     SizedBox(height: 20,),
-                    AdwButton.flat(
+                    TextButton(
                       child: Text('微信自动回复脚本测试'),
                       onPressed: () {
                         WxAutoReplyRepository().autoReplyAtFirstLiveShow().then((value) {
@@ -108,7 +107,7 @@ class _MobileConnectionPageState extends State<MobileConnectionPage> {
                       },
                     ),
                     SizedBox(height: 20,),
-                    AdwButton.flat(
+                    TextButton(
                       child: Text('Wi-Fi方式连接设备'),
                       onPressed: () {
                         AdbScriptsRepository.runWifiDeviceConnection().then((value) {
@@ -126,7 +125,7 @@ class _MobileConnectionPageState extends State<MobileConnectionPage> {
                       },
                     ),
                     SizedBox(height: 20,),
-                    AdwButton.flat(
+                    TextButton(
                       child: Text('单独测试获取IP地址'),
                       onPressed: () {
                         CommandController.executeAdbCommand(AdbCommand.getIpAddress).then((value) {
@@ -150,7 +149,7 @@ class _MobileConnectionPageState extends State<MobileConnectionPage> {
                       },
                     ),
                     SizedBox(height: 20,),
-                    AdwButton.flat(
+                    TextButton(
                       child: Text('手机屏幕自动解锁'),
                       onPressed: () {
                         AdbScriptsRepository.runAutoUnlockScreen().then((value) {
