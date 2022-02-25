@@ -4,7 +4,7 @@ import 'package:mobile_controller/model/script_config_data.dart';
 import 'package:mobile_controller/scripts/script_ability.dart';
 import 'package:mobile_controller/utils/log_helper.dart';
 
-import '../../command/command_controller.dart';
+import '../../commands/command_controller.dart';
 
 /// Base step task model to provide once or looped execution ability.
 /// Note that step task run finished without result.

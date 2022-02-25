@@ -4,7 +4,7 @@ import 'package:mobile_controller/config/constants.dart';
 import 'package:provider/provider.dart';
 import 'package:url_launcher/url_launcher.dart';
 
-import '../command/command_controller.dart';
+import '../commands/command_controller.dart';
 import '../config/command_config.dart';
 import '../model/device_result.dart';
 import '../utils/log_helper.dart';

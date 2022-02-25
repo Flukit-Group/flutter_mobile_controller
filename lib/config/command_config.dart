@@ -1,10 +1,10 @@
 
-import 'package:mobile_controller/command/adb/adb_command_executor.dart';
-import 'package:mobile_controller/command/adb/customized_cmd_executor.dart';
-import 'package:mobile_controller/command/adb/devices_list_cmd_executor.dart';
-import 'package:mobile_controller/command/adb/ip_address_cmd_executor.dart';
-import 'package:mobile_controller/command/adb/tcpip_listener_cmd_executor.dart';
-import 'package:mobile_controller/command/adb/wifi_connect_cmd_executor.dart';
+import 'package:mobile_controller/commands/adb/adb_command_executor.dart';
+import 'package:mobile_controller/commands/adb/customized_cmd_executor.dart';
+import 'package:mobile_controller/commands/adb/connection/devices_list_cmd_executor.dart';
+import 'package:mobile_controller/commands/adb/connection/ip_address_cmd_executor.dart';
+import 'package:mobile_controller/commands/adb/connection/tcpip_listener_cmd_executor.dart';
+import 'package:mobile_controller/commands/adb/connection/wifi_connect_cmd_executor.dart';
 
 /// Configs of commands such as adb, sys cmd or java cmd.
 /// @author Dorck
@@ -43,11 +43,12 @@ class CommandConfig {
   // 模拟文本输入 (适配中文) solution see: https://github.com/senzhk/ADBKeyBoard
   static const adbCmdInputTextByBroadcast = 'shell am broadcast -a ADB_INPUT_TEXT --es msg';
   // 判断apk是否安装
-  static const adbCmdPackageIsInstalled = 'adb shell pm list packages';
+  static const adbCmdPackageIsInstalled = 'shell pm list packages';
   // 拾取用户点击手机屏幕的位置坐标 e.g.
   // /dev/input/event4: 0003 0035 000002c1 (x)
   // /dev/input/event4: 0003 0036 0000091e (y)
   static const adbCmdRecordTapPosition = 'getevent -c 10';
+  static const adbCmdForeWindow = 'shell dumpsys window | grep mCurrentFocus';
 
   // Instruction and Executor Mapping Table.
   static Map<AdbCommand, AdbCommandExecutor> get adbCommandExecutors => {

@@ -3,7 +3,7 @@ import 'package:mobile_controller/model/execute_result.dart';
 import 'package:mobile_controller/model/script_config_data.dart';
 import 'package:mobile_controller/scripts/steps/base_step.dart';
 import 'package:mobile_controller/utils/log_helper.dart';
-import '../../command/command_controller.dart';
+import '../../commands/command_controller.dart';
 import '../../config/command_config.dart';
 import '../script_ability.dart';
 import '../steps/simple_customized_step.dart';

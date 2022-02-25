@@ -87,6 +87,9 @@ flutter:
     - assets/linux/tools.zip
     - assets/dy_device_adapt.json # 抖音各主流机型适配
 
+    # images
+    - assets/images/empty_dev_list.png
+
   # To add assets to your application, add an assets section, like this:
   # assets:
   #   - images/a_dot_burr.jpeg

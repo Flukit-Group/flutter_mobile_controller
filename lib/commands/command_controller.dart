@@ -25,12 +25,6 @@ class CommandController {
     await checkEnv(executable: executable);
     var executor = CommandConfig.adbCommandExecutors[command];
     if (executor != null) {
-      var commandStr = executor.commandString();
-      // if (command == AdbCommand.customized) {
-      //   logI('customized command: $extArguments', tag: 'CommandController');
-      // } else {
-      //   logI('execute command: $commandStr, cmdType: $command', tag: 'CommandController');
-      // }
       return executor.execute(executable: executable,
           extArguments: extArguments,
           synchronous: synchronous,

@@ -1,5 +1,5 @@
 
-import 'package:mobile_controller/command/command_controller.dart';
+import 'package:mobile_controller/commands/command_controller.dart';
 import 'package:mobile_controller/config/command_config.dart';
 import 'package:mobile_controller/model/execute_result.dart';
 import 'package:mobile_controller/scripts/steps/base_step.dart';

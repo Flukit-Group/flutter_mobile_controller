@@ -6,7 +6,7 @@ import 'package:mobile_controller/model/script_config_data.dart';
 import 'package:mobile_controller/repository/common_repository.dart';
 import 'package:mobile_controller/scripts/steps/base_step.dart';
 import 'package:mobile_controller/utils/log_helper.dart';
-import '../../command/command_controller.dart';
+import '../../commands/command_controller.dart';
 import '../../config/command_config.dart';
 
 /// Step execution to mock input text and support chinese language.

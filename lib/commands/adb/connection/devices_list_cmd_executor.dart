@@ -1,12 +1,12 @@
 
 import 'dart:io';
 
-import 'package:mobile_controller/command/adb/adb_command_executor.dart';
+import 'package:mobile_controller/commands/adb/adb_command_executor.dart';
 import 'package:mobile_controller/config/command_config.dart';
 import 'package:mobile_controller/model/device_result.dart';
 import 'package:mobile_controller/model/execute_result.dart';
 
-import '../../utils/platform_adapt_utils.dart';
+import '../../../utils/platform_adapt_utils.dart';
 /// Implementation of command executor to fetch devices under connection.
 /// @author dorck
 /// @date 2022/02/08

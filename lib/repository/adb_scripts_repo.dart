@@ -3,7 +3,7 @@ import 'package:mobile_controller/model/execute_result.dart';
 import 'package:mobile_controller/scripts/runners/device_wifi_connection_runner.dart';
 import 'package:mobile_controller/scripts/runners/screen_auto_unlock_runner.dart';
 import 'package:mobile_controller/scripts/script_ability.dart';
-import '../command/command_controller.dart';
+import '../commands/command_controller.dart';
 import '../model/script_config_data.dart';
 import '../scripts/internal/temporary_script_data_source.dart';
 

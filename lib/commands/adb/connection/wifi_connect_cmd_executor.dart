@@ -1,7 +1,7 @@
 
 import 'dart:io';
 
-import 'package:mobile_controller/command/adb/adb_command_executor.dart';
+import 'package:mobile_controller/commands/adb/adb_command_executor.dart';
 import 'package:mobile_controller/config/command_config.dart';
 import 'package:mobile_controller/model/execute_result.dart';
 

@@ -1,6 +1,6 @@
 
 import 'package:flutter/material.dart';
-import 'package:mobile_controller/command/command_controller.dart';
+import 'package:mobile_controller/commands/command_controller.dart';
 import 'package:mobile_controller/config/command_config.dart';
 import 'package:mobile_controller/repository/adb_scripts_repo.dart';
 import 'package:mobile_controller/repository/wx_auto_reply_repo.dart';
