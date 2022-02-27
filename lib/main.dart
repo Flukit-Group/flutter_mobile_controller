@@ -1,5 +1,7 @@
+import 'package:bot_toast/bot_toast.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_acrylic/flutter_acrylic.dart';
 import 'package:mobile_controller/config/common_config.dart';
 import 'package:mobile_controller/config/constants.dart';
 import 'package:mobile_controller/pages/desktop_root_window.dart';
@@ -24,6 +26,7 @@ void main() async {
   WidgetsFlutterBinding.ensureInitialized();
   CommonConfig.initAppVersion();
   await InitializerHelper.init(CommonConfig.configs);
+  await Window.initialize();
   Future.delayed(const Duration(milliseconds: 100), () {
     runApp(MyApp());
   });
@@ -59,6 +62,8 @@ class MyApp extends StatelessWidget {
           //home: HomePage(themeNotifier: themeNotifier),
           home: DesktopRootWindow(),
           themeMode: currentMode,
+          builder: BotToastInit(), //1. call BotToastInit
+          navigatorObservers: [BotToastNavigatorObserver()],
         );
       },
     );
